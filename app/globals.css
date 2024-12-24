@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-background: #f0f4f8;
+  --color-primary: #4a90e2;
+  --color-secondary: #50c878;
+  --color-text: #333333;
+  --color-text-light: #ffffff;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: 'Arial', sans-serif;
+}
+
+.btn {
+  @apply font-bold py-2 px-4 rounded transition duration-300 ease-in-out text-lg;
+}
+
+.btn-primary {
+  @apply bg-blue-500 text-white hover:bg-blue-600;
+}
+
+.btn-secondary {
+  @apply bg-green-500 text-white hover:bg-green-600;
+}
+
+.btn-danger {
+  @apply bg-red-500 text-white hover:bg-red-600;
+}
+
+.input {
+  @apply p-2 text-black rounded border-2 border-gray-300 focus:border-blue-500 focus:outline-none text-lg;
+}
+
