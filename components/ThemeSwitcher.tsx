@@ -10,23 +10,22 @@ export default function ThemeSwitcher() {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme
-    if (savedTheme) {
-      setTheme(savedTheme)
-      applyTheme(savedTheme)
-    }
-  }, [])
+    const savedTheme = (localStorage.getItem('theme') as Theme) ?? 'system'
+    setTheme(savedTheme)
+    applyTheme(savedTheme)
+  })
 
   const applyTheme = (newTheme: Theme) => {
-    const root = window.document.documentElement
-    root.classList.remove('light', 'dark')
+    const root = document.documentElement
+
     if (newTheme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
+      newTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
         : 'light'
-      root.classList.add(systemTheme)
-    } else {
+    }
+
+    if (!root.classList.contains(newTheme)) {
+      root.classList.remove('light', 'dark')
       root.classList.add(newTheme)
     }
   }
