@@ -1,29 +1,44 @@
 # 🎮 Game Score
 
-![Game Score Logo](https://game-score.chmendes.com.br/icon-192x192.png)
-
-Game Score is a web application designed to keep track of scores in various games. Whether you're playing board games, card games, or any other type of game that requires score tracking, Game Score has got you covered!
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-username%2Fgame-score)
+![Game Score Logo](./public/images/android-chrome-192x192.png)
 
 ## 🌟 Features
 
-- 📊 Real-time score tracking
 - 🌍 Multi-language support (English, Portuguese, Spanish)
 - 🏆 Winner detection and celebration
 - 📱 Responsive design for mobile and desktop
 - 🔗 Shareable game links
 - 📜 Game history
 - 🎨 Customizable game settings
-- 💾 Offline support (PWA)
+
+[//]: # '- 💾 Offline support (PWA)'
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or later)
-- npm (v6 or later)
+- Node.js (v15 or later)
+- npm (v10 or later)
 
 ### Installation
 
 1. Clone the repository:
+
+```bash
+  git clone git@github.com:chrsmendes/game-score.git
+```
+
+2. Install the dependencies:
+
+```bash
+  npm install
+```
+
+3. Start the development server:
+
+```bash
+  npm run dev
+```
+
+4. Open the browser and go to `http://localhost:3000`
+5. Enjoy!
