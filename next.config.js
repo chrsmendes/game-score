@@ -2,7 +2,8 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
+  buildExcludes: [/middleware-manifest\.json$/],
+  disable: process.env.NODE_ENV === 'development', // Add this line
 })
 
 const nextConfig = {
@@ -12,6 +13,14 @@ const nextConfig = {
     defaultLocale: 'en',
   },
   async rewrites() {
+    if (process.env.NODE_ENV === 'development') {
+      return [
+        {
+          source: '/:path*',
+          destination: `http://localhost:3000/:path*`,
+        },
+      ]
+    }
     return [
       {
         source: '/:path*',
@@ -36,6 +45,11 @@ const nextConfig = {
     if (dev && !isServer) {
       const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
       config.plugins.push(new ForkTsCheckerWebpackPlugin())
+    }
+    if (!dev && !isServer) {
+      console.warn(
+        '⚠ GenerateSW has been called multiple times, perhaps due to running webpack in --watch mode. The precache manifest generated after the first call may be inaccurate! Please see https://github.com/GoogleChrome/workbox/issues/1790 for more information.'
+      )
     }
     return config
   },
