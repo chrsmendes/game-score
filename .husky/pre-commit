@@ -1,0 +1,5 @@
+#!/bin/sh
+# Pre-commit hook script
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx lint-staged

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Player } from '../types'
-import { useLanguage } from '../contexts/LanguageContext'
+import { Player } from '../app/types'
+import { useLanguage } from './LanguageContext'
 import PlayerHistory from './PlayerHistory'
 
 interface PlayerListProps {
@@ -11,16 +11,18 @@ interface PlayerListProps {
   updateAllScores: (changes: number[]) => void
 }
 
-export default function PlayerList({ 
-  players, 
-  addPlayer, 
+export default function PlayerList({
+  players,
+  addPlayer,
   updateScore,
   updatePlayerName,
-  updateAllScores
+  updateAllScores,
 }: PlayerListProps) {
   const { t } = useLanguage()
   const [newPlayerName, setNewPlayerName] = useState('')
-  const [roundPoints, setRoundPoints] = useState<string[]>(players.map(() => ''))
+  const [roundPoints, setRoundPoints] = useState<string[]>(
+    players.map(() => '')
+  )
 
   const handleAddPlayer = (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,13 +34,18 @@ export default function PlayerList({
   }
 
   const handleUpdateAllScores = () => {
-    updateAllScores(roundPoints.map(points => points === '' ? 0 : parseFloat(points)))
+    updateAllScores(
+      roundPoints.map((points) => (points === '' ? 0 : parseFloat(points)))
+    )
     setRoundPoints(players.map(() => ''))
   }
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleAddPlayer} className="flex flex-col md:flex-row items-center gap-2">
+      <form
+        onSubmit={handleAddPlayer}
+        className="flex flex-col md:flex-row items-center gap-2"
+      >
         <input
           type="text"
           value={newPlayerName}
@@ -52,7 +59,7 @@ export default function PlayerList({
       </form>
       <ul className="space-y-4">
         {players.map((player, index) => (
-          <PlayerItem 
+          <PlayerItem
             key={index}
             player={player}
             updateScore={(points) => updateScore(index, points)}
@@ -68,10 +75,7 @@ export default function PlayerList({
       </ul>
       {players.length > 0 && (
         <div className="flex justify-end">
-          <button 
-            onClick={handleUpdateAllScores}
-            className="btn btn-secondary"
-          >
+          <button onClick={handleUpdateAllScores} className="btn btn-secondary">
             {t('updateAllScores')}
           </button>
         </div>
@@ -88,7 +92,13 @@ interface PlayerItemProps {
   setRoundPoints: (points: string) => void
 }
 
-function PlayerItem({ player, updateScore, updatePlayerName, roundPoints, setRoundPoints }: PlayerItemProps) {
+function PlayerItem({
+  player,
+  updateScore,
+  updatePlayerName,
+  roundPoints,
+  setRoundPoints,
+}: PlayerItemProps) {
   const [showHistory, setShowHistory] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(player.name)
@@ -100,7 +110,7 @@ function PlayerItem({ player, updateScore, updatePlayerName, roundPoints, setRou
   }
 
   return (
-    <li className="bg-gray-100 p-4 rounded-lg shadow">
+    <li className="bg-card p-4 rounded-lg shadow">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         {isEditing ? (
           <div className="flex items-center gap-2">
@@ -117,9 +127,13 @@ function PlayerItem({ player, updateScore, updatePlayerName, roundPoints, setRou
         ) : (
           <div className="flex items-center gap-2">
             <span className="text-xl font-bold">
-              {player.name}: {player.score % 1 === 0 ? player.score : player.score.toFixed(2)}
+              {player.name}:{' '}
+              {player.score % 1 === 0 ? player.score : player.score.toFixed(2)}
             </span>
-            <button onClick={() => setIsEditing(true)} className="text-blue-500 hover:underline">
+            <button
+              onClick={() => setIsEditing(true)}
+              className="text-blue-500 hover:underline"
+            >
               {t('edit')}
             </button>
           </div>
@@ -147,4 +161,3 @@ function PlayerItem({ player, updateScore, updatePlayerName, roundPoints, setRou
     </li>
   )
 }
-

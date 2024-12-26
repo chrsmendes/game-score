@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from './LanguageContext'
 import { Globe } from 'lucide-react'
 
 export default function LanguageSelector() {
@@ -17,7 +17,10 @@ export default function LanguageSelector() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false)
       }
     }
@@ -68,4 +71,3 @@ export default function LanguageSelector() {
     </div>
   )
 }
-

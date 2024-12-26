@@ -1,14 +1,38 @@
-/** @type {import('next').NextConfig} */
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+})
+
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   i18n: {
     locales: ['en', 'pt', 'es'],
     defaultLocale: 'en',
   },
-  // Add any development-specific configurations here
+  async rewrites() {
+    return [
+      {
+        source: '/:path*',
+        destination: `https://game-score.chmendes.com.br/:path*`,
+      },
+    ]
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow',
+          },
+        ],
+      },
+    ]
+  },
   webpack: (config, { dev, isServer }) => {
-    // Custom webpack config for development
     if (dev && !isServer) {
       const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
       config.plugins.push(new ForkTsCheckerWebpackPlugin())
@@ -17,5 +41,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
-
+module.exports = withPWA(nextConfig)
