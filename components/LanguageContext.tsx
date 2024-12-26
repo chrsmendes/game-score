@@ -1,9 +1,9 @@
 'use client'
 
 import React, { createContext, useState, useContext, useEffect } from 'react'
-import pt from '../locales/pt'
-import en from '../locales/en'
-import es from '../locales/es'
+import pt from '../app/locales/pt'
+import en from '../app/locales/en'
+import es from '../app/locales/es'
 
 type Locale = 'pt' | 'en' | 'es'
 
@@ -13,7 +13,9 @@ interface LanguageContextType {
   t: (key: string, params?: Record<string, string>) => string
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+)
 
 export const useLanguage = () => {
   const context = useContext(LanguageContext)
@@ -23,9 +25,11 @@ export const useLanguage = () => {
   return context
 }
 
-const translations = { pt, en, es }
+const translations: Record<Locale, Record<string, string>> = { pt, en, es }
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [locale, setLocale] = useState<Locale>('en')
 
   useEffect(() => {
@@ -34,7 +38,9 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setLocale(savedLocale)
     } else {
       const browserLocale = navigator.language.split('-')[0] as Locale
-      const defaultLocale = Object.keys(translations).includes(browserLocale) ? browserLocale : 'en'
+      const defaultLocale = Object.keys(translations).includes(browserLocale)
+        ? browserLocale
+        : 'en'
       setLocale(defaultLocale)
     }
   }, [])
@@ -59,4 +65,3 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     </LanguageContext.Provider>
   )
 }
-

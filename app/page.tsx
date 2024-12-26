@@ -1,24 +1,34 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import GameSetup from './components/GameSetup'
-import PlayerList from './components/PlayerList'
-import ScoreBoard from './components/ScoreBoard'
-import Confetti from './components/Confetti'
-import CookieMessage from './components/CookieMessage'
-import LanguageSelector from './components/LanguageSelector'
-import GameHistory from './components/GameHistory'
-import { LanguageProvider, useLanguage } from './contexts/LanguageContext'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
+import GameSetup from '../components/GameSetup'
+import PlayerList from '../components/PlayerList'
+import ScoreBoard from '../components/ScoreBoard'
+import Confetti from '../components/Confetti'
+import CookieMessage from '../components/CookieMessage'
+import LanguageSelector from '../components/LanguageSelector'
+import GameHistory from '../components/GameHistory'
+import Footer from '../components/Footer'
+import ThemeSwitcher from '../components/ThemeSwitcher'
+import { LanguageProvider, useLanguage } from '../components/LanguageContext'
 import { Player, GameState, GameRound } from './types'
 
-function Game() {
+// Ensure winner is always string | null
+const initialState: GameState = {
+  gameName: '',
+  targetScore: 0,
+  initialPoints: 0,
+  players: [],
+  winner: null,
+}
+
+function GameWithSearchParams() {
   const { t } = useLanguage()
-  const router = useRouter()
   const searchParams = useSearchParams()
   const [gameState, setGameState] = useState<GameState>(() => {
     if (typeof window !== 'undefined') {
-      const sharedState = searchParams.get('state')
+      const sharedState = searchParams?.get('state')
       if (sharedState) {
         try {
           return JSON.parse(atob(sharedState))
@@ -31,16 +41,11 @@ function Game() {
         return JSON.parse(saved)
       }
     }
-    return {
-      gameName: '',
-      targetScore: 0,
-      initialPoints: 0,
-      players: [],
-      winner: null,
-    }
+    return initialState
   })
 
   const [showSetup, setShowSetup] = useState(false)
+  const [showTargetScoreUpdate, setShowTargetScoreUpdate] = useState(false)
   const [shareLink, setShareLink] = useState('')
   const [showHistory, setShowHistory] = useState(false)
   const [gameHistory, setGameHistory] = useState<GameRound[]>([])
@@ -57,22 +62,28 @@ function Game() {
   }, [])
 
   const addPlayer = (name: string) => {
-    setGameState(prev => ({
+    setGameState((prev) => ({
       ...prev,
-      players: [...prev.players, { name, score: prev.initialPoints, history: [] }],
+      players: [
+        ...prev.players,
+        { name, score: prev.initialPoints, history: [] },
+      ],
     }))
   }
 
   const updateScore = (index: number, points: number) => {
-    setGameState(prev => {
+    setGameState((prev) => {
       const newPlayers = [...prev.players]
-      newPlayers[index].score = parseFloat((newPlayers[index].score + points).toFixed(2))
+      newPlayers[index].score = parseFloat(
+        (newPlayers[index].score + points).toFixed(2)
+      )
       newPlayers[index].history.push({ points, timestamp: Date.now() })
-      const highestScore = Math.max(...newPlayers.map(p => p.score))
-      const winner = prev.targetScore > 0 && highestScore >= prev.targetScore
-        ? newPlayers.find(p => p.score === highestScore)?.name
-        : null
-    
+      const highestScore = Math.max(...newPlayers.map((p) => p.score))
+      const winner =
+        prev.targetScore > 0 && highestScore >= prev.targetScore
+          ? newPlayers.find((p) => p.score === highestScore)?.name || null
+          : null
+
       if (winner) {
         saveGameRound({ ...prev, players: newPlayers, winner })
       }
@@ -82,17 +93,21 @@ function Game() {
   }
 
   const updateAllScores = (changes: number[]) => {
-    setGameState(prev => {
+    setGameState((prev) => {
       const newPlayers = prev.players.map((player, index) => ({
         ...player,
         score: parseFloat((player.score + changes[index]).toFixed(2)),
-        history: [...player.history, { points: changes[index], timestamp: Date.now() }]
+        history: [
+          ...player.history,
+          { points: changes[index], timestamp: Date.now() },
+        ],
       }))
-      const highestScore = Math.max(...newPlayers.map(p => p.score))
-      const winner = prev.targetScore > 0 && highestScore >= prev.targetScore
-        ? newPlayers.find(p => p.score === highestScore)?.name
-        : null
-    
+      const highestScore = Math.max(...newPlayers.map((p) => p.score))
+      const winner =
+        prev.targetScore > 0 && highestScore >= prev.targetScore
+          ? newPlayers.find((p) => p.score === highestScore)?.name || null
+          : null
+
       if (winner) {
         saveGameRound({ ...prev, players: newPlayers, winner })
       }
@@ -102,7 +117,7 @@ function Game() {
   }
 
   const updatePlayerName = (index: number, newName: string) => {
-    setGameState(prev => {
+    setGameState((prev) => {
       const newPlayers = [...prev.players]
       newPlayers[index].name = newName
       return { ...prev, players: newPlayers }
@@ -120,12 +135,11 @@ function Game() {
   }
 
   const changeTarget = () => {
-    setShowSetup(true)
-    setGameState(prev => ({ ...prev, winner: null }))
+    setShowTargetScoreUpdate(true)
   }
 
   const closeWinnerMessage = () => {
-    setGameState(prev => ({ ...prev, winner: null }))
+    setGameState((prev) => ({ ...prev, winner: null }))
   }
 
   const generateShareLink = () => {
@@ -135,9 +149,10 @@ function Game() {
   }
 
   const copyShareLink = () => {
-    navigator.clipboard.writeText(shareLink)
+    navigator.clipboard
+      .writeText(shareLink)
       .then(() => alert(t('linkCopied')))
-      .catch(err => console.error('Failed to copy link:', err))
+      .catch((err) => console.error('Failed to copy link:', err))
   }
 
   const saveGameRound = (state: GameState) => {
@@ -162,17 +177,18 @@ function Game() {
 
   return (
     <main className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto relative">
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 flex items-center space-x-4">
+        <ThemeSwitcher />
         <LanguageSelector />
       </div>
-      <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 mt-12">
+      <div className="bg-card text-card-foreground rounded-lg shadow-lg p-6 md:p-8 mt-12">
         {!gameState.gameName || showSetup ? (
           <>
-            <GameSetup 
+            <GameSetup
               setGameState={(newState) => {
-                setGameState(prev => ({ ...prev, ...newState, winner: null }))
+                setGameState((prev) => ({ ...prev, ...newState, winner: null }))
                 setShowSetup(false)
-              }} 
+              }}
               initialState={gameState}
             />
             <button
@@ -182,28 +198,50 @@ function Game() {
               {t('viewGameHistory')}
             </button>
           </>
+        ) : showTargetScoreUpdate ? (
+          <GameSetup
+            setGameState={(newState) => {
+              setGameState((prev) => ({ ...prev, ...newState, winner: null }))
+              setShowTargetScoreUpdate(false)
+            }}
+            initialState={gameState}
+            isUpdating={true}
+          />
         ) : (
           <>
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">{gameState.gameName}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">
+              {gameState.gameName}
+            </h1>
             <p className="mb-6 text-xl text-center">
-              {t('targetScore')}: {gameState.targetScore > 0 ? (gameState.targetScore % 1 === 0 ? gameState.targetScore : gameState.targetScore.toFixed(2)) : t('noTargetScore')}
+              {t('targetScore')}:{' '}
+              {gameState.targetScore > 0
+                ? gameState.targetScore % 1 === 0
+                  ? gameState.targetScore
+                  : gameState.targetScore.toFixed(2)
+                : t('noTargetScore')}
             </p>
             <p className="mb-6 text-xl text-center">
-              {t('initialPoints')}: {gameState.initialPoints % 1 === 0 ? gameState.initialPoints : gameState.initialPoints.toFixed(2)}
+              {t('initialPoints')}:{' '}
+              {gameState.initialPoints % 1 === 0
+                ? gameState.initialPoints
+                : gameState?.initialPoints?.toFixed(2)}
             </p>
-            <PlayerList 
-              players={gameState.players} 
-              addPlayer={addPlayer} 
+            <PlayerList
+              players={gameState.players}
+              addPlayer={addPlayer}
               updateScore={updateScore}
               updatePlayerName={updatePlayerName}
               updateAllScores={updateAllScores}
             />
             <ScoreBoard players={gameState.players} />
             <div className="mt-8 flex flex-col items-center gap-4">
-              <button 
-                onClick={resetGame}
-                className="btn btn-danger w-full"
+              <button
+                onClick={changeTarget}
+                className="btn btn-secondary w-full"
               >
+                {t('changeTargetScore')}
+              </button>
+              <button onClick={resetGame} className="btn btn-danger w-full">
                 {t('restartGame')}
               </button>
               <button
@@ -226,10 +264,7 @@ function Game() {
                     readOnly
                     className="input flex-grow"
                   />
-                  <button
-                    onClick={copyShareLink}
-                    className="btn btn-secondary"
-                  >
+                  <button onClick={copyShareLink} className="btn btn-secondary">
                     {t('copy')}
                   </button>
                 </div>
@@ -239,8 +274,8 @@ function Game() {
         )}
       </div>
       {gameState.winner && (
-        <Confetti 
-          winner={gameState.winner} 
+        <Confetti
+          winner={gameState.winner}
           onClose={closeWinnerMessage}
           onChangeTarget={changeTarget}
           onNewGame={resetGame}
@@ -250,9 +285,17 @@ function Game() {
         <GameHistory
           history={gameHistory}
           onClose={() => setShowHistory(false)}
+          onDelete={(id) => {
+            const updatedHistory = gameHistory.filter(
+              (round) => round.id !== id
+            )
+            setGameHistory(updatedHistory)
+            localStorage.setItem('gameHistory', JSON.stringify(updatedHistory))
+          }}
         />
       )}
       <CookieMessage />
+      <Footer />
     </main>
   )
 }
@@ -260,8 +303,9 @@ function Game() {
 export default function Home() {
   return (
     <LanguageProvider>
-      <Game />
+      <Suspense fallback={<div>Loading...</div>}>
+        <GameWithSearchParams />
+      </Suspense>
     </LanguageProvider>
   )
 }
-
