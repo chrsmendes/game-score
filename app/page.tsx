@@ -262,7 +262,7 @@ function GameWithSearchParams() {
                     type="text"
                     value={shareLink}
                     readOnly
-                    className="input flex-grow"
+                    className="input flex-grow w-full"
                   />
                   <button onClick={copyShareLink} className="btn btn-secondary">
                     {t('copy')}
