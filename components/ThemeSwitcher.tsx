@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from './LanguageContext'
 import { Sun, Moon, Monitor } from 'lucide-react'
 
@@ -8,12 +8,29 @@ export default function ThemeSwitcher() {
   const { t } = useLanguage()
   const [theme, setTheme] = useState<Theme>('system')
   const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const savedTheme = (localStorage.getItem('theme') as Theme) ?? 'system'
     setTheme(savedTheme)
     applyTheme(savedTheme)
-  })
+  }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   const applyTheme = (newTheme: Theme) => {
     const root = document.documentElement
@@ -38,7 +55,7 @@ export default function ThemeSwitcher() {
   }
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-1 bg-secondary text-secondary-foreground px-3 py-2 rounded-md"
