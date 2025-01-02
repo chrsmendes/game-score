@@ -54,4 +54,9 @@ export default {
   dark: 'Dark',
   light: 'Light',
   deleteHistory: 'Delete history item',
+  gameNameTooltip: 'Examples: "Truco" or "Uno"',
+  targetScoreTooltip: 'Examples: "In Truco, the target score is 12"',
+  initialPointsTooltip:
+    'Examples: "All players start with 50 points, and the goal is to reach 0"',
+  closeInput: 'Close',
 }

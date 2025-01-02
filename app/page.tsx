@@ -49,6 +49,7 @@ function GameWithSearchParams() {
   const [shareLink, setShareLink] = useState('')
   const [showHistory, setShowHistory] = useState(false)
   const [gameHistory, setGameHistory] = useState<GameRound[]>([])
+  const [copySuccess, setCopySuccess] = useState(false)
 
   useEffect(() => {
     localStorage.setItem('gameState', JSON.stringify(gameState))
@@ -151,7 +152,11 @@ function GameWithSearchParams() {
   const copyShareLink = () => {
     navigator.clipboard
       .writeText(shareLink)
-      .then(() => alert(t('linkCopied')))
+      .then(() => {
+        setCopySuccess(true)
+        setTimeout(() => setCopySuccess(false), 2000)
+        setShareLink('')
+      })
       .catch((err) => console.error('Failed to copy link:', err))
   }
 
@@ -267,7 +272,16 @@ function GameWithSearchParams() {
                   <button onClick={copyShareLink} className="btn btn-secondary">
                     {t('copy')}
                   </button>
+                  <button
+                    onClick={() => setShareLink('')}
+                    className="btn btn-danger"
+                  >
+                    {t('closeInput')}
+                  </button>
                 </div>
+              )}
+              {copySuccess && (
+                <div className="mt-2 text-green-500">{t('linkCopied')}</div>
               )}
             </div>
           </>
