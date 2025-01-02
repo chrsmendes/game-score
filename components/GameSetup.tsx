@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react'
 import { GameState } from '../app/types'
 import { useLanguage } from './LanguageContext'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { Info } from 'lucide-react'
 
 interface GameSetupProps {
   setGameState: (state: Partial<GameState>) => void
@@ -47,6 +54,14 @@ export default function GameSetup({
         <div>
           <label htmlFor="gameName" className="block mb-2 text-xl">
             {t('gameName')}:
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="ml-2 inline-block text-gray-500" />
+                </TooltipTrigger>
+                <TooltipContent>{t('gameNameTooltip')}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </label>
           <input
             type="text"
@@ -61,6 +76,14 @@ export default function GameSetup({
       <div>
         <label htmlFor="targetScore" className="block mb-2 text-xl">
           {t('targetScore')}:
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Info className="ml-2 inline-block text-gray-500" />
+              </TooltipTrigger>
+              <TooltipContent>{t('targetScoreTooltip')}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </label>
         <input
           type="number"
@@ -76,6 +99,14 @@ export default function GameSetup({
         <div>
           <label htmlFor="initialPoints" className="block mb-2 text-xl">
             {t('initialPoints')}:
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="ml-2 inline-block text-gray-500" />
+                </TooltipTrigger>
+                <TooltipContent>{t('initialPointsTooltip')}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </label>
           <input
             type="number"
