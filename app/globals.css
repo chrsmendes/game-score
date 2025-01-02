@@ -86,5 +86,6 @@
 
 .input {
   @apply p-2 rounded border-2 border-input focus:border-ring focus:outline-none text-lg bg-background;
-  @apply w-full max-w-xs;
+  @apply w-full;
+  @apply max-w-full;
 }
