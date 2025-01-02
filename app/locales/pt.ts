@@ -56,5 +56,7 @@ export default {
   deleteHistory: 'Excluir item do histórico',
   gameNameTooltip: 'Exemplos: "Truco" ou "Uno"',
   targetScoreTooltip: 'Exemplos: "No Truco, a pontuação objetivo é 12"',
-  initialPointsTooltip: 'Exemplos: "Todos os jogadores começam com 50 pontos, e o objetivo é chegar a 0"',
+  initialPointsTooltip:
+    'Exemplos: "Todos os jogadores começam com 50 pontos, e o objetivo é chegar a 0"',
+  closeInput: 'Fechar',
 }
