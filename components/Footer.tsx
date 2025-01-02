@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLanguage } from './LanguageContext'
-import { Info } from 'lucide-react'
+import { Info, Github } from 'lucide-react'
 import Changelog from './Changelog/Changelog'
 import { marked } from 'marked'
 
@@ -63,6 +63,15 @@ export default function Footer() {
         >
           <Info size={16} />
         </button>
+        <a
+          href="https://github.com/chrsmendes/game-score"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-600"
+          aria-label="GitHub Repository"
+        >
+          <Github size={16} />
+        </a>
       </div>
       {showChangelog &&
         (error ? (
