@@ -10,13 +10,13 @@ export default function Footer() {
   const [version, setVersion] = useState('')
   const [changelog, setChangelog] = useState('')
   const [error, setError] = useState(false)
+  const urlReleaseInfo =
+    'https://api.github.com/repos/chrsmendes/game-score/releases/latest'
 
   useEffect(() => {
     const fetchReleaseInfo = async () => {
       try {
-        const response = await fetch(
-          'https://api.github.com/repos/chrsmendes/game-score/releases/latest'
-        )
+        const response = await fetch(urlReleaseInfo)
         if (!response.ok) {
           throw new Error('Network response was not ok')
         }
@@ -72,7 +72,11 @@ export default function Footer() {
             </p>
           </div>
         ) : (
-          <Changelog version={version} changelog={changelog} />
+          <Changelog
+            version={version}
+            changelog={changelog}
+            urlReleaseInfo={urlReleaseInfo}
+          />
         ))}
     </footer>
   )
