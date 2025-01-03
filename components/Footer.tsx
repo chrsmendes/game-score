@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLanguage } from './LanguageContext'
-import { Info } from 'lucide-react'
+import { Info, Github } from 'lucide-react'
 import Changelog from './Changelog/Changelog'
 import { marked } from 'marked'
 
@@ -10,13 +10,13 @@ export default function Footer() {
   const [version, setVersion] = useState('')
   const [changelog, setChangelog] = useState('')
   const [error, setError] = useState(false)
+  const urlReleaseInfo =
+    'https://api.github.com/repos/chrsmendes/game-score/releases/latest'
 
   useEffect(() => {
     const fetchReleaseInfo = async () => {
       try {
-        const response = await fetch(
-          'https://api.github.com/repos/chrsmendes/game-score/releases/latest'
-        )
+        const response = await fetch(urlReleaseInfo)
         if (!response.ok) {
           throw new Error('Network response was not ok')
         }
@@ -63,6 +63,15 @@ export default function Footer() {
         >
           <Info size={16} />
         </button>
+        <a
+          href="https://github.com/chrsmendes/game-score"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-600"
+          aria-label="GitHub Repository"
+        >
+          <Github size={16} />
+        </a>
       </div>
       {showChangelog &&
         (error ? (
@@ -72,7 +81,11 @@ export default function Footer() {
             </p>
           </div>
         ) : (
-          <Changelog version={version} changelog={changelog} />
+          <Changelog
+            version={version}
+            changelog={changelog}
+            urlReleaseInfo={urlReleaseInfo}
+          />
         ))}
     </footer>
   )
