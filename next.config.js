@@ -3,17 +3,18 @@ const withPWA = require('next-pwa')({
   register: true,
   skipWaiting: true,
   buildExcludes: [/middleware-manifest\.json$/],
-  disable: process.env.NODE_ENV === 'development', // Add this line
-})
+  disable: process.env.NODE_ENV === 'development', // Desativa PWA em desenvolvimento
+});
 
 const nextConfig = {
   reactStrictMode: true,
   i18n: {
     locales: ['en', 'pt', 'es'],
     defaultLocale: 'en',
+    localeDetection: false, // Evita redirecionamentos automáticos baseados no idioma do navegador
   },
   async rewrites() {
-    return []
+    return [];
   },
   async headers() {
     return [
@@ -26,20 +27,20 @@ const nextConfig = {
           },
         ],
       },
-    ]
+    ];
   },
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {
-      const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-      config.plugins.push(new ForkTsCheckerWebpackPlugin())
+      const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+      config.plugins.push(new ForkTsCheckerWebpackPlugin());
     }
     if (!dev && !isServer) {
       console.warn(
-        '⚠ GenerateSW has been called multiple times, perhaps due to running webpack in --watch mode. The precache manifest generated after the first call may be inaccurate! Please see https://github.com/GoogleChrome/workbox/issues/1790 for more information.'
-      )
+        '⚠ GenerateSW has been chamado várias vezes. Verifique o precache manifest para garantir que não há duplicações!'
+      );
     }
-    return config
+    return config;
   },
-}
+};
 
-module.exports = withPWA(nextConfig)
+module.exports = withPWA(nextConfig);
