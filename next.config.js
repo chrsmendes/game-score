@@ -13,20 +13,7 @@ const nextConfig = {
     defaultLocale: 'en',
   },
   async rewrites() {
-    if (process.env.NODE_ENV === 'development') {
-      return [
-        {
-          source: '/:path*',
-          destination: `http://localhost:3000/:path*`,
-        },
-      ]
-    }
-    return [
-      {
-        source: '/:path*',
-        destination: `https://game-score.chmendes.com.br/:path*`,
-      },
-    ]
+    return []
   },
   async headers() {
     return [
