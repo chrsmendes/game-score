@@ -21,12 +21,7 @@ const nextConfig = {
         },
       ]
     }
-    return [
-      {
-        source: '/:path*',
-        destination: `https://game-score.chmendes.com.br/:path*`,
-      },
-    ]
+    return []
   },
   async headers() {
     return [
