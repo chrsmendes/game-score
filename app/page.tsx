@@ -308,6 +308,9 @@ function GameWithSearchParams() {
           }}
         />
       )}
+      <p className="mt-6 text-center text-sm text-gray-500">
+        Example for BYUI team
+      </p>
       <CookieMessage />
       <Footer />
     </main>
