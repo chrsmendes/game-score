@@ -67,7 +67,7 @@ export default function RootLayout({
         <meta name="msapplication-starturl" content="/" />
         <meta name="msapplication-TileColor" content="#4a90e2" />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <LanguageProvider>{children}</LanguageProvider>
         <Script id="register-sw" strategy="afterInteractive">
           {`

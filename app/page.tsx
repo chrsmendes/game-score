@@ -11,6 +11,7 @@ import LanguageSelector from '../components/LanguageSelector'
 import GameHistory from '../components/GameHistory'
 import Footer from '../components/Footer'
 import ThemeSwitcher from '../components/ThemeSwitcher'
+import ClientOnly from '../components/ClientOnly'
 import { LanguageProvider, useLanguage } from '../components/LanguageContext'
 import { Player, GameState, GameRound } from './types'
 
@@ -318,7 +319,9 @@ export default function Home() {
   return (
     <LanguageProvider>
       <Suspense fallback={<div>Loading...</div>}>
-        <GameWithSearchParams />
+        <ClientOnly>
+          <GameWithSearchParams />
+        </ClientOnly>
       </Suspense>
     </LanguageProvider>
   )

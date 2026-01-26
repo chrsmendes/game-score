@@ -8,12 +8,14 @@ export default function ThemeSwitcher() {
   const { t } = useLanguage()
   const [theme, setTheme] = useState<Theme>('system')
   const [isOpen, setIsOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const savedTheme = (localStorage.getItem('theme') as Theme) ?? 'system'
     setTheme(savedTheme)
     applyTheme(savedTheme)
+    setIsMounted(true)
   }, [])
 
   useEffect(() => {
@@ -63,9 +65,9 @@ export default function ThemeSwitcher() {
         {theme === 'system' && <Monitor size={16} />}
         {theme === 'dark' && <Moon size={16} />}
         {theme === 'light' && <Sun size={16} />}
-        <span>{t(theme)}</span>
+        {isMounted && <span>{t(theme)}</span>}
       </button>
-      {isOpen && (
+      {isMounted && isOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-popover text-popover-foreground rounded-md shadow-lg z-10">
           <button
             onClick={() => handleThemeChange('system')}
