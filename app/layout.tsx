@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { LanguageProvider } from '../components/LanguageContext'
 import Script from 'next/script'
 import { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -69,6 +70,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <LanguageProvider>{children}</LanguageProvider>
+        <Analytics />
         <Script id="register-sw" strategy="afterInteractive">
           {`
             if ('serviceWorker' in navigator) {
