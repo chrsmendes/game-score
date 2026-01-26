@@ -6,7 +6,6 @@ import PlayerHistory from './PlayerHistory'
 interface PlayerListProps {
   players: Player[]
   addPlayer: (name: string) => void
-  updateScore: (index: number, change: number) => void
   updatePlayerName: (index: number, newName: string) => void
   updateAllScores: (changes: number[]) => void
 }
@@ -14,7 +13,6 @@ interface PlayerListProps {
 export default function PlayerList({
   players,
   addPlayer,
-  updateScore,
   updatePlayerName,
   updateAllScores,
 }: PlayerListProps) {
@@ -62,7 +60,6 @@ export default function PlayerList({
           <PlayerItem
             key={index}
             player={player}
-            updateScore={(points) => updateScore(index, points)}
             updatePlayerName={(newName) => updatePlayerName(index, newName)}
             roundPoints={roundPoints[index]}
             setRoundPoints={(points) => {
@@ -86,7 +83,6 @@ export default function PlayerList({
 
 interface PlayerItemProps {
   player: Player
-  updateScore: (points: number) => void
   updatePlayerName: (newName: string) => void
   roundPoints: string
   setRoundPoints: (points: string) => void
@@ -94,7 +90,6 @@ interface PlayerItemProps {
 
 function PlayerItem({
   player,
-  updateScore,
   updatePlayerName,
   roundPoints,
   setRoundPoints,

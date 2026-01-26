@@ -13,7 +13,7 @@ import Footer from '../components/Footer'
 import ThemeSwitcher from '../components/ThemeSwitcher'
 import ClientOnly from '../components/ClientOnly'
 import { LanguageProvider, useLanguage } from '../components/LanguageContext'
-import { Player, GameState, GameRound } from './types'
+import { GameState, GameRound } from './types'
 
 // Ensure winner is always string | null
 const initialState: GameState = {
@@ -71,27 +71,6 @@ function GameWithSearchParams() {
         { name, score: prev.initialPoints, history: [] },
       ],
     }))
-  }
-
-  const updateScore = (index: number, points: number) => {
-    setGameState((prev) => {
-      const newPlayers = [...prev.players]
-      newPlayers[index].score = parseFloat(
-        (newPlayers[index].score + points).toFixed(2)
-      )
-      newPlayers[index].history.push({ points, timestamp: Date.now() })
-      const highestScore = Math.max(...newPlayers.map((p) => p.score))
-      const winner =
-        prev.targetScore > 0 && highestScore >= prev.targetScore
-          ? newPlayers.find((p) => p.score === highestScore)?.name || null
-          : null
-
-      if (winner) {
-        saveGameRound({ ...prev, players: newPlayers, winner })
-      }
-
-      return { ...prev, players: newPlayers, winner }
-    })
   }
 
   const updateAllScores = (changes: number[]) => {
@@ -235,7 +214,6 @@ function GameWithSearchParams() {
             <PlayerList
               players={gameState.players}
               addPlayer={addPlayer}
-              updateScore={updateScore}
               updatePlayerName={updatePlayerName}
               updateAllScores={updateAllScores}
             />
