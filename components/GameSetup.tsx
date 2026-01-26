@@ -123,8 +123,8 @@ export default function GameSetup({
         {isUpdating
           ? t('updateTargetScore')
           : initialState.gameName
-          ? t('updateGame')
-          : t('startGame')}
+            ? t('updateGame')
+            : t('startGame')}
       </button>
     </form>
   )
