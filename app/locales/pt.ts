@@ -1,4 +1,4 @@
-export default {
+const pt = {
   gameName: 'Nome do Jogo',
   targetScore: 'Pontuação Objetivo',
   initialPoints: 'Pontos Iniciais',
@@ -60,3 +60,5 @@ export default {
     'Exemplos: "Todos os jogadores começam com 50 pontos, e o objetivo é chegar a 0"',
   closeInput: 'Fechar',
 }
+
+export default pt
