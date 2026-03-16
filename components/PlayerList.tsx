@@ -71,8 +71,8 @@ export default function PlayerList({
         ))}
       </ul>
       {players.length > 0 && (
-        <div className="flex justify-end">
-          <button onClick={handleUpdateAllScores} className="btn btn-secondary">
+        <div className="flex">
+          <button onClick={handleUpdateAllScores} className="btn btn-success w-full">
             {t('updateAllScores')}
           </button>
         </div>
