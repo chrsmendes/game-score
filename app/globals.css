@@ -80,6 +80,10 @@
   @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
 }
 
+.btn-success {
+  @apply bg-green-600 text-white hover:bg-green-700 py-3 px-6 text-xl;
+}
+
 .btn-danger {
   @apply bg-destructive text-destructive-foreground hover:bg-destructive/90;
 }
