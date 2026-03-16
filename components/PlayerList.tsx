@@ -134,6 +134,21 @@ function PlayerItem({
           </div>
         )}
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              if (roundPoints !== '') {
+                const num = parseFloat(roundPoints)
+                if (!isNaN(num) && num !== 0) {
+                  setRoundPoints(String(-num))
+                }
+              }
+            }}
+            className="btn btn-secondary"
+            aria-label="Toggle sign"
+          >
+            +/-
+          </button>
           <input
             type="number"
             value={roundPoints}
