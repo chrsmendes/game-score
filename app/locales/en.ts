@@ -54,6 +54,7 @@ const en = {
   dark: 'Dark',
   light: 'Light',
   deleteHistory: 'Delete history item',
+  clickToShareGame: 'Click any game to generate a share link.',
   gameNameTooltip: 'Examples: "Truco" or "Uno"',
   targetScoreTooltip: 'Examples: "In Truco, the target score is 12"',
   initialPointsTooltip:

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useLanguage } from './LanguageContext'
-import { Info, Github } from 'lucide-react'
-import Changelog from './Changelog/Changelog'
+import { Github, Info, Sparkles } from 'lucide-react'
 import { marked } from 'marked'
+import { useLanguage } from './LanguageContext'
+import Changelog from './Changelog/Changelog'
 
 export default function Footer() {
   const { t } = useLanguage()
@@ -51,32 +51,45 @@ export default function Footer() {
   }, [])
 
   return (
-    <footer className="mt-8 text-sm">
-      <div className="flex justify-center items-center space-x-2 text-center">
-        <p>
-          Game Score {version} ({t('beta')})
-        </p>
-        <button
-          onClick={() => setShowChangelog(!showChangelog)}
-          className="text-blue-500 hover:text-blue-600"
-          aria-label="Show changelog"
-        >
-          <Info size={16} />
-        </button>
-        <a
-          href="https://github.com/chrsmendes/game-score"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 hover:text-blue-600"
-          aria-label="GitHub Repository"
-        >
-          <Github size={16} />
-        </a>
+    <footer className="pb-6 text-sm">
+      <div className="surface-panel px-5 py-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[1rem] bg-primary/10 text-primary">
+              <Sparkles className="h-4 w-4" />
+            </div>
+            <p className="text-sm font-medium text-muted-foreground">
+              <span className="font-semibold text-foreground">Game Score</span>{' '}
+              {version} ({t('beta')})
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowChangelog(!showChangelog)}
+              className="btn btn-secondary h-11 px-4"
+              aria-label="Show changelog"
+            >
+              <Info className="h-4 w-4" />
+              {version || 'release'}
+            </button>
+            <a
+              href="https://github.com/chrsmendes/game-score"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-secondary h-11 px-4"
+              aria-label="GitHub Repository"
+            >
+              <Github className="h-4 w-4" />
+              GitHub
+            </a>
+          </div>
+        </div>
       </div>
       {showChangelog &&
         (error ? (
-          <div className="mt-2 p-2 shadow-lg rounded-lg">
-            <p className="text-center text-red-500">
+          <div className="surface-panel mt-4 p-4">
+            <p className="text-center text-sm text-destructive">
               Failed to load changelog. Please try again later.
             </p>
           </div>

@@ -1,46 +1,57 @@
 .markdown-content h1 {
-  font-size: 2em;
-  margin-bottom: 0.5em;
+  font-size: 1.875rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
 }
 
 .markdown-content h2 {
-  font-size: 1.5em;
-  margin-bottom: 0.5em;
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 .markdown-content h3 {
-  font-size: 1.25em;
-  margin-bottom: 0.5em;
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
+  font-weight: 600;
 }
 
 .markdown-content ul {
   list-style-type: disc;
   margin-left: 1.5em;
+  display: grid;
+  gap: 0.5rem;
 }
 
 .markdown-content ol {
   list-style-type: decimal;
   margin-left: 1.5em;
+  display: grid;
+  gap: 0.5rem;
 }
 
 .markdown-content p {
   margin-bottom: 1em;
+  line-height: 1.7;
 }
 
 .markdown-content a {
-  color: #1e40af;
+  color: #0f5a74;
   text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .markdown-content blockquote {
-  border-left: 4px solid #d1d5db;
+  border-left: 4px solid #8cc5d8;
   padding-left: 1em;
-  color: #6b7280;
+  color: #5d6b75;
   margin: 1em 0;
 }
 
 .markdown-content code {
-  background-color: #f3f4f6;
+  background-color: rgba(15, 90, 116, 0.08);
   padding: 0.2em 0.4em;
   border-radius: 0.25em;
 }

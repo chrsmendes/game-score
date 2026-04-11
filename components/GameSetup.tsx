@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Info } from 'lucide-react'
+import { Gamepad2, Info, Sparkles, Target } from 'lucide-react'
 
 interface GameSetupProps {
   setGameState: (state: Partial<GameState>) => void
@@ -48,20 +48,36 @@ export default function GameSetup({
     })
   }
 
+  const renderTooltip = (content: string) => (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            className="rounded-full border border-border/70 bg-background/70 p-1 text-muted-foreground transition-colors hover:text-foreground"
+            aria-label={content}
+          >
+            <Info className="h-3.5 w-3.5" />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent className="max-w-xs rounded-2xl border border-border/70 bg-popover/95 px-3 py-2 text-xs leading-5 text-popover-foreground shadow-lg backdrop-blur-xl">
+          {content}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  )
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {!isUpdating && (
-        <div>
-          <label htmlFor="gameName" className="block mb-2 text-xl">
-            {t('gameName')}:
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Info className="ml-2 inline-block text-gray-500" />
-                </TooltipTrigger>
-                <TooltipContent>{t('gameNameTooltip')}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+        <div className="space-y-2">
+          <label
+            htmlFor="gameName"
+            className="mb-2 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground"
+          >
+            <Gamepad2 className="h-4 w-4" />
+            {t('gameName')}
+            {renderTooltip(t('gameNameTooltip'))}
           </label>
           <input
             type="text"
@@ -69,56 +85,52 @@ export default function GameSetup({
             value={gameName}
             onChange={(e) => setGameName(e.target.value)}
             required
-            className="input w-full"
+            className="input"
           />
         </div>
       )}
-      <div>
-        <label htmlFor="targetScore" className="block mb-2 text-xl">
-          {t('targetScore')}:
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Info className="ml-2 inline-block text-gray-500" />
-              </TooltipTrigger>
-              <TooltipContent>{t('targetScoreTooltip')}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </label>
-        <input
-          type="number"
-          id="targetScore"
-          value={targetScore}
-          onChange={(e) => setTargetScore(e.target.value)}
-          step="any"
-          placeholder="0"
-          className="input w-full"
-        />
-      </div>
-      {!isUpdating && (
-        <div>
-          <label htmlFor="initialPoints" className="block mb-2 text-xl">
-            {t('initialPoints')}:
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Info className="ml-2 inline-block text-gray-500" />
-                </TooltipTrigger>
-                <TooltipContent>{t('initialPointsTooltip')}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+      <div className={`grid gap-5 ${isUpdating ? '' : 'md:grid-cols-2'}`}>
+        <div className="space-y-2">
+          <label
+            htmlFor="targetScore"
+            className="mb-2 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground"
+          >
+            <Target className="h-4 w-4" />
+            {t('targetScore')}
+            {renderTooltip(t('targetScoreTooltip'))}
           </label>
           <input
             type="number"
-            id="initialPoints"
-            value={initialPoints}
-            onChange={(e) => setInitialPoints(e.target.value)}
+            id="targetScore"
+            value={targetScore}
+            onChange={(e) => setTargetScore(e.target.value)}
             step="any"
             placeholder="0"
-            className="input w-full"
+            className="input"
           />
         </div>
-      )}
+        {!isUpdating && (
+          <div className="space-y-2">
+            <label
+              htmlFor="initialPoints"
+              className="mb-2 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground"
+            >
+              <Sparkles className="h-4 w-4" />
+              {t('initialPoints')}
+              {renderTooltip(t('initialPointsTooltip'))}
+            </label>
+            <input
+              type="number"
+              id="initialPoints"
+              value={initialPoints}
+              onChange={(e) => setInitialPoints(e.target.value)}
+              step="any"
+              placeholder="0"
+              className="input"
+            />
+          </div>
+        )}
+      </div>
       <button type="submit" className="btn btn-primary w-full">
         {isUpdating
           ? t('updateTargetScore')

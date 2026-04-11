@@ -20,11 +20,19 @@ export default function CookieMessage() {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-secondary p-4 text-center">
-      <p className="text-secondary-foreground mb-2">{t('cookieMessage')}</p>
-      <button onClick={handleUnderstand} className="btn btn-primary text-sm">
-        {t('understood')}
-      </button>
+    <div className="fixed inset-x-4 bottom-4 z-40 mx-auto max-w-2xl rounded-[1.8rem] border border-border/70 bg-card/92 p-4 shadow-[0_24px_60px_-36px_hsl(var(--foreground)/0.55)] backdrop-blur-xl">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm leading-6 text-card-foreground">
+          {t('cookieMessage')}
+        </p>
+        <button
+          type="button"
+          onClick={handleUnderstand}
+          className="btn btn-primary shrink-0"
+        >
+          {t('understood')}
+        </button>
+      </div>
     </div>
   )
 }

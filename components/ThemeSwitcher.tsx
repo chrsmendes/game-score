@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from './LanguageContext'
-import { Sun, Moon, Monitor } from 'lucide-react'
+import { Check, ChevronDown, Monitor, Moon, Sun } from 'lucide-react'
 
 type Theme = 'system' | 'dark' | 'light'
 
@@ -56,40 +56,58 @@ export default function ThemeSwitcher() {
     setIsOpen(false)
   }
 
+  const themeIcons = {
+    system: Monitor,
+    dark: Moon,
+    light: Sun,
+  } satisfies Record<Theme, typeof Monitor>
+
+  const ThemeIcon = themeIcons[theme]
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-1 bg-secondary text-secondary-foreground px-3 py-2 rounded-md"
+        className="btn btn-secondary min-w-[9.5rem] justify-between px-4 py-3"
+        aria-expanded={isOpen}
       >
-        {theme === 'system' && <Monitor size={16} />}
-        {theme === 'dark' && <Moon size={16} />}
-        {theme === 'light' && <Sun size={16} />}
-        {isMounted && <span>{t(theme)}</span>}
+        <span className="flex items-center gap-2">
+          <ThemeIcon className="h-4 w-4" />
+          {isMounted && <span>{t(theme)}</span>}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
       </button>
       {isMounted && isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-popover text-popover-foreground rounded-md shadow-lg z-10">
-          <button
-            onClick={() => handleThemeChange('system')}
-            className="block w-full text-left px-4 py-2 hover:bg-accent hover:text-accent-foreground"
-          >
-            <Monitor size={16} className="inline-block mr-2" />
-            {t('system')}
-          </button>
-          <button
-            onClick={() => handleThemeChange('dark')}
-            className="block w-full text-left px-4 py-2 hover:bg-accent hover:text-accent-foreground"
-          >
-            <Moon size={16} className="inline-block mr-2" />
-            {t('dark')}
-          </button>
-          <button
-            onClick={() => handleThemeChange('light')}
-            className="block w-full text-left px-4 py-2 hover:bg-accent hover:text-accent-foreground"
-          >
-            <Sun size={16} className="inline-block mr-2" />
-            {t('light')}
-          </button>
+        <div className="absolute right-0 z-20 mt-3 w-52 rounded-[1.5rem] border border-border/70 bg-popover/95 p-2 text-popover-foreground shadow-[0_24px_60px_-32px_hsl(var(--foreground)/0.5)] backdrop-blur-xl">
+          {(
+            [
+              ['system', Monitor],
+              ['dark', Moon],
+              ['light', Sun],
+            ] as const
+          ).map(([option, Icon]) => (
+            <button
+              key={option}
+              type="button"
+              onClick={() => handleThemeChange(option)}
+              className={`flex w-full items-center justify-between rounded-[1rem] px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                theme === option
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-popover-foreground hover:bg-accent/15'
+              }`}
+            >
+              <span className="flex items-center gap-3">
+                <Icon className="h-4 w-4" />
+                {t(option)}
+              </span>
+              {theme === option && <Check className="h-4 w-4" />}
+            </button>
+          ))}
         </div>
       )}
     </div>

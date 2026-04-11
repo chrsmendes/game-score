@@ -1,7 +1,16 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import {
+  History,
+  Link2,
+  RotateCcw,
+  Sparkles,
+  Target,
+  Trophy,
+  Users,
+} from 'lucide-react'
 import GameSetup from '../components/GameSetup'
 import PlayerList from '../components/PlayerList'
 import ScoreBoard from '../components/ScoreBoard'
@@ -12,10 +21,9 @@ import GameHistory from '../components/GameHistory'
 import Footer from '../components/Footer'
 import ThemeSwitcher from '../components/ThemeSwitcher'
 import ClientOnly from '../components/ClientOnly'
-import { LanguageProvider, useLanguage } from '../components/LanguageContext'
-import { GameState, GameRound } from './types'
+import { useLanguage } from '../components/LanguageContext'
+import { GameRound, GameState } from './types'
 
-// Ensure winner is always string | null
 const initialState: GameState = {
   gameName: '',
   targetScore: 0,
@@ -23,6 +31,9 @@ const initialState: GameState = {
   players: [],
   winner: null,
 }
+
+const formatScore = (value: number) =>
+  value % 1 === 0 ? value.toString() : value.toFixed(2)
 
 function GameWithSearchParams() {
   const { t } = useLanguage()
@@ -37,11 +48,13 @@ function GameWithSearchParams() {
           console.error('Failed to parse shared state:', error)
         }
       }
+
       const saved = localStorage.getItem('gameState')
       if (saved) {
         return JSON.parse(saved)
       }
     }
+
     return initialState
   })
 
@@ -83,10 +96,11 @@ function GameWithSearchParams() {
           { points: changes[index], timestamp: Date.now() },
         ],
       }))
-      const highestScore = Math.max(...newPlayers.map((p) => p.score))
+      const highestScore = Math.max(...newPlayers.map((player) => player.score))
       const winner =
         prev.targetScore > 0 && highestScore >= prev.targetScore
-          ? newPlayers.find((p) => p.score === highestScore)?.name || null
+          ? newPlayers.find((player) => player.score === highestScore)?.name ||
+            null
           : null
 
       if (winner) {
@@ -106,13 +120,8 @@ function GameWithSearchParams() {
   }
 
   const resetGame = () => {
-    setGameState({
-      gameName: '',
-      targetScore: 0,
-      initialPoints: 0,
-      players: [],
-      winner: null,
-    })
+    setGameState(initialState)
+    setShareLink('')
   }
 
   const changeTarget = () => {
@@ -137,7 +146,7 @@ function GameWithSearchParams() {
         setTimeout(() => setCopySuccess(false), 2000)
         setShareLink('')
       })
-      .catch((err) => console.error('Failed to copy link:', err))
+      .catch((error) => console.error('Failed to copy link:', error))
   }
 
   const saveGameRound = (state: GameState) => {
@@ -151,7 +160,7 @@ function GameWithSearchParams() {
       winner: state.winner,
     }
 
-    const updatedHistory = [newRound, ...gameHistory].slice(0, 10) // Keep only the last 10 games
+    const updatedHistory = [newRound, ...gameHistory].slice(0, 10)
     setGameHistory(updatedHistory)
     localStorage.setItem('gameHistory', JSON.stringify(updatedHistory))
   }
@@ -160,147 +169,452 @@ function GameWithSearchParams() {
     setShowHistory(!showHistory)
   }
 
+  const leader =
+    gameState.players.length > 0
+      ? [...gameState.players].sort((a, b) => b.score - a.score)[0]
+      : null
+
+  const gameSummary = [
+    {
+      icon: Target,
+      label: t('targetScore'),
+      value:
+        gameState.targetScore > 0
+          ? formatScore(gameState.targetScore)
+          : t('noTargetScore'),
+    },
+    {
+      icon: Sparkles,
+      label: t('initialPoints'),
+      value: formatScore(gameState.initialPoints),
+    },
+    {
+      icon: Users,
+      label: t('players'),
+      value: gameState.players.length.toString().padStart(2, '0'),
+    },
+  ]
+
+  const latestRounds = gameHistory.slice(0, 3)
+
   return (
-    <main className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto relative">
-      <div className="absolute top-4 right-4 flex items-center space-x-4">
-        <ThemeSwitcher />
-        <LanguageSelector />
-      </div>
-      <div className="bg-card text-card-foreground rounded-lg shadow-lg p-6 md:p-8 mt-12">
+    <main className="relative min-h-screen overflow-hidden px-4 py-5 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6">
+        <header className="surface-panel relative overflow-hidden px-5 py-6 sm:px-6">
+          <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_center,_hsl(var(--primary)/0.24),_transparent_72%)]" />
+          <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+          <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.4rem] bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                <Trophy className="h-6 w-6" />
+              </div>
+              <div className="space-y-3">
+                <span className="section-label">Game Score</span>
+                <div className="space-y-3">
+                  <h1 className="text-4xl font-semibold tracking-[-0.06em] sm:text-5xl">
+                    Game Score
+                  </h1>
+                  <div className="flex flex-wrap gap-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                    <span className="rounded-full border border-border/60 bg-background/55 px-3 py-1">
+                      {t('scoreboard')}
+                    </span>
+                    <span className="rounded-full border border-border/60 bg-background/55 px-3 py-1">
+                      {t('gameHistory')}
+                    </span>
+                    <span className="rounded-full border border-border/60 bg-background/55 px-3 py-1">
+                      {t('generateShareLink')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <ThemeSwitcher />
+              <LanguageSelector />
+            </div>
+          </div>
+        </header>
+
         {!gameState.gameName || showSetup ? (
-          <>
-            <GameSetup
-              setGameState={(newState) => {
-                setGameState((prev) => ({ ...prev, ...newState, winner: null }))
-                setShowSetup(false)
-              }}
-              initialState={gameState}
-            />
-            <button
-              onClick={toggleHistory}
-              className="mt-4 btn btn-secondary w-full"
-            >
-              {t('viewGameHistory')}
-            </button>
-          </>
-        ) : showTargetScoreUpdate ? (
-          <GameSetup
-            setGameState={(newState) => {
-              setGameState((prev) => ({ ...prev, ...newState, winner: null }))
-              setShowTargetScoreUpdate(false)
-            }}
-            initialState={gameState}
-            isUpdating={true}
-          />
-        ) : (
-          <>
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">
-              {gameState.gameName}
-            </h1>
-            <p className="mb-6 text-xl text-center">
-              {t('targetScore')}:{' '}
-              {gameState.targetScore > 0
-                ? gameState.targetScore % 1 === 0
-                  ? gameState.targetScore
-                  : gameState.targetScore.toFixed(2)
-                : t('noTargetScore')}
-            </p>
-            <p className="mb-6 text-xl text-center">
-              {t('initialPoints')}:{' '}
-              {gameState.initialPoints % 1 === 0
-                ? gameState.initialPoints
-                : gameState?.initialPoints?.toFixed(2)}
-            </p>
-            <PlayerList
-              players={gameState.players}
-              addPlayer={addPlayer}
-              updatePlayerName={updatePlayerName}
-              updateAllScores={updateAllScores}
-            />
-            <ScoreBoard players={gameState.players} />
-            <div className="mt-8 flex flex-col items-center gap-4">
-              <button
-                onClick={changeTarget}
-                className="btn btn-secondary w-full"
-              >
-                {t('changeTargetScore')}
-              </button>
-              <button onClick={resetGame} className="btn btn-danger w-full">
-                {t('restartGame')}
-              </button>
-              <button
-                onClick={generateShareLink}
-                className="btn btn-primary w-full"
-              >
-                {t('generateShareLink')}
-              </button>
-              <button
-                onClick={toggleHistory}
-                className="btn btn-secondary w-full"
-              >
-                {t('viewGameHistory')}
-              </button>
-              {shareLink && (
-                <div className="flex items-center gap-2 w-full">
-                  <input
-                    type="text"
-                    value={shareLink}
-                    readOnly
-                    className="input flex-grow w-full"
+          <section className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_360px]">
+            <div className="surface-panel p-5 sm:p-6 lg:p-8">
+              <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_250px]">
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <span className="section-label">{t('startGame')}</span>
+                    <div className="space-y-2">
+                      <h2 className="text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
+                        Game Score
+                      </h2>
+                      <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
+                        {t('gameName')} · {t('targetScore')} ·{' '}
+                        {t('initialPoints')}
+                      </p>
+                    </div>
+                  </div>
+                  <GameSetup
+                    setGameState={(newState) => {
+                      setGameState((prev) => ({
+                        ...prev,
+                        ...newState,
+                        winner: null,
+                      }))
+                      setShowSetup(false)
+                    }}
+                    initialState={gameState}
                   />
-                  <button onClick={copyShareLink} className="btn btn-secondary">
-                    {t('copy')}
-                  </button>
                   <button
-                    onClick={() => setShareLink('')}
-                    className="btn btn-danger"
+                    type="button"
+                    onClick={toggleHistory}
+                    className="btn btn-secondary w-full"
                   >
-                    {t('closeInput')}
+                    <History className="h-4 w-4" />
+                    {t('viewGameHistory')}
                   </button>
                 </div>
-              )}
-              {copySuccess && (
-                <div className="mt-2 text-green-500">{t('linkCopied')}</div>
-              )}
+
+                <div className="grid content-start gap-4">
+                  {gameSummary.map((item) => (
+                    <div key={item.label} className="metric-card space-y-3">
+                      <div className="flex items-center justify-between text-muted-foreground">
+                        <span className="text-xs font-semibold uppercase tracking-[0.2em]">
+                          {item.label}
+                        </span>
+                        <item.icon className="h-4 w-4" />
+                      </div>
+                      <p className="text-lg font-semibold leading-tight text-foreground">
+                        {item.value}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </>
+
+            <aside className="surface-panel relative overflow-hidden p-5 sm:p-6">
+              <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,_hsl(var(--accent)/0.28),_transparent_70%)]" />
+              <div className="relative space-y-5">
+                <div className="space-y-3">
+                  <span className="section-label">
+                    <History className="h-3.5 w-3.5" />
+                    {t('gameHistory')}
+                  </span>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-semibold tracking-[-0.05em]">
+                      {t('gameHistory')}
+                    </h3>
+                    <p className="text-sm leading-6 text-muted-foreground">
+                      {gameHistory.length > 0
+                        ? `${gameHistory.length} ${t('gameHistory').toLowerCase()}`
+                        : t('noGameHistory')}
+                    </p>
+                  </div>
+                </div>
+
+                {latestRounds.length > 0 ? (
+                  <div className="space-y-3">
+                    {latestRounds.map((round) => (
+                      <div key={round.id} className="metric-card space-y-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <p className="text-lg font-semibold leading-tight">
+                            {round.gameName}
+                          </p>
+                          <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                            {formatScore(round.targetScore)}
+                          </span>
+                        </div>
+                        <div className="space-y-1 text-sm text-muted-foreground">
+                          <p>
+                            {t('winner')}: {round.winner || t('noWinner')}
+                          </p>
+                          <p>{new Date(round.date).toLocaleString()}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="metric-card">
+                    <p className="text-sm leading-6 text-muted-foreground">
+                      {t('noGameHistory')}
+                    </p>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={toggleHistory}
+                  className="btn btn-primary w-full"
+                >
+                  <History className="h-4 w-4" />
+                  {t('viewGameHistory')}
+                </button>
+              </div>
+            </aside>
+          </section>
+        ) : showTargetScoreUpdate ? (
+          <section className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_360px]">
+            <div className="surface-panel p-5 sm:p-6 lg:p-8">
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <span className="section-label">
+                    {t('changeTargetScore')}
+                  </span>
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
+                      {gameState.gameName}
+                    </h2>
+                    <p className="text-sm leading-6 text-muted-foreground sm:text-base">
+                      {t('targetScore')}:{' '}
+                      {gameState.targetScore > 0
+                        ? formatScore(gameState.targetScore)
+                        : t('noTargetScore')}
+                    </p>
+                  </div>
+                </div>
+                <GameSetup
+                  setGameState={(newState) => {
+                    setGameState((prev) => ({
+                      ...prev,
+                      ...newState,
+                      winner: null,
+                    }))
+                    setShowTargetScoreUpdate(false)
+                  }}
+                  initialState={gameState}
+                  isUpdating={true}
+                />
+              </div>
+            </div>
+
+            <aside className="flex flex-col gap-6">
+              <div className="surface-panel p-5 sm:p-6">
+                <ScoreBoard players={gameState.players} />
+              </div>
+              <div className="surface-panel p-5 sm:p-6">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <span className="section-label">{t('gameHistory')}</span>
+                    <p className="text-sm leading-6 text-muted-foreground">
+                      {leader
+                        ? `${leader.name}: ${formatScore(leader.score)}`
+                        : `${t('players')}: ${gameState.players.length}`}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={toggleHistory}
+                    className="btn btn-secondary w-full"
+                  >
+                    <History className="h-4 w-4" />
+                    {t('viewGameHistory')}
+                  </button>
+                </div>
+              </div>
+            </aside>
+          </section>
+        ) : (
+          <section className="grid gap-6 xl:grid-cols-[minmax(0,1.3fr)_390px]">
+            <div className="surface-panel p-5 sm:p-6 lg:p-8">
+              <div className="space-y-8">
+                <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(240px,290px)]">
+                  <div className="space-y-4">
+                    <span className="section-label">{t('scoreboard')}</span>
+                    <div className="space-y-3">
+                      <h2 className="text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
+                        {gameState.gameName}
+                      </h2>
+                      <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+                        <span className="rounded-full border border-border/70 bg-background/60 px-3 py-1.5">
+                          {t('targetScore')}:{' '}
+                          {gameState.targetScore > 0
+                            ? formatScore(gameState.targetScore)
+                            : t('noTargetScore')}
+                        </span>
+                        <span className="rounded-full border border-border/70 bg-background/60 px-3 py-1.5">
+                          {t('initialPoints')}:{' '}
+                          {formatScore(gameState.initialPoints)}
+                        </span>
+                        <span className="rounded-full border border-border/70 bg-background/60 px-3 py-1.5">
+                          {t('players')}: {gameState.players.length}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                    {gameSummary.map((item) => (
+                      <div key={item.label} className="metric-card space-y-3">
+                        <div className="flex items-center justify-between text-muted-foreground">
+                          <span className="text-xs font-semibold uppercase tracking-[0.2em]">
+                            {item.label}
+                          </span>
+                          <item.icon className="h-4 w-4" />
+                        </div>
+                        <p className="text-lg font-semibold leading-tight">
+                          {item.value}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <PlayerList
+                  players={gameState.players}
+                  addPlayer={addPlayer}
+                  updatePlayerName={updatePlayerName}
+                  updateAllScores={updateAllScores}
+                />
+              </div>
+            </div>
+
+            <aside className="flex flex-col gap-6">
+              <div className="surface-panel p-5 sm:p-6">
+                <ScoreBoard players={gameState.players} />
+              </div>
+
+              <div className="surface-panel relative overflow-hidden p-5 sm:p-6">
+                <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.2),_transparent_70%)]" />
+                <div className="relative space-y-5">
+                  <div className="space-y-3">
+                    <span className="section-label">
+                      <Link2 className="h-3.5 w-3.5" />
+                      {t('generateShareLink')}
+                    </span>
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-semibold tracking-[-0.05em]">
+                        {leader ? leader.name : gameState.gameName}
+                      </h3>
+                      <p className="text-sm leading-6 text-muted-foreground">
+                        {leader
+                          ? `${formatScore(leader.score)} ${t('points')}`
+                          : `${t('targetScore')}: ${
+                              gameState.targetScore > 0
+                                ? formatScore(gameState.targetScore)
+                                : t('noTargetScore')
+                            }`}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3">
+                    <button
+                      type="button"
+                      onClick={changeTarget}
+                      className="btn btn-secondary w-full"
+                    >
+                      <Target className="h-4 w-4" />
+                      {t('changeTargetScore')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={generateShareLink}
+                      className="btn btn-primary w-full"
+                    >
+                      <Link2 className="h-4 w-4" />
+                      {t('generateShareLink')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={toggleHistory}
+                      className="btn btn-secondary w-full"
+                    >
+                      <History className="h-4 w-4" />
+                      {t('viewGameHistory')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={resetGame}
+                      className="btn btn-danger w-full"
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                      {t('restartGame')}
+                    </button>
+                  </div>
+
+                  {shareLink && (
+                    <div className="metric-card space-y-3">
+                      <input
+                        type="text"
+                        value={shareLink}
+                        readOnly
+                        className="input font-mono text-sm"
+                      />
+                      <div className="flex flex-col gap-3 sm:flex-row">
+                        <button
+                          type="button"
+                          onClick={copyShareLink}
+                          className="btn btn-primary flex-1"
+                        >
+                          <Link2 className="h-4 w-4" />
+                          {t('copy')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setShareLink('')}
+                          className="btn btn-secondary flex-1"
+                        >
+                          {t('closeInput')}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {copySuccess && (
+                    <div className="rounded-[1.4rem] border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                      {t('linkCopied')}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </aside>
+          </section>
         )}
+
+        {gameState.winner && (
+          <Confetti
+            winner={gameState.winner}
+            onClose={closeWinnerMessage}
+            onChangeTarget={changeTarget}
+            onNewGame={resetGame}
+          />
+        )}
+
+        {showHistory && (
+          <GameHistory
+            history={gameHistory}
+            onClose={() => setShowHistory(false)}
+            onDelete={(id) => {
+              const updatedHistory = gameHistory.filter(
+                (round) => round.id !== id
+              )
+              setGameHistory(updatedHistory)
+              localStorage.setItem(
+                'gameHistory',
+                JSON.stringify(updatedHistory)
+              )
+            }}
+          />
+        )}
+
+        <CookieMessage />
+        <Footer />
       </div>
-      {gameState.winner && (
-        <Confetti
-          winner={gameState.winner}
-          onClose={closeWinnerMessage}
-          onChangeTarget={changeTarget}
-          onNewGame={resetGame}
-        />
-      )}
-      {showHistory && (
-        <GameHistory
-          history={gameHistory}
-          onClose={() => setShowHistory(false)}
-          onDelete={(id) => {
-            const updatedHistory = gameHistory.filter(
-              (round) => round.id !== id
-            )
-            setGameHistory(updatedHistory)
-            localStorage.setItem('gameHistory', JSON.stringify(updatedHistory))
-          }}
-        />
-      )}
-      <CookieMessage />
-      <Footer />
     </main>
   )
 }
 
 export default function Home() {
   return (
-    <LanguageProvider>
-      <Suspense fallback={<div>Loading...</div>}>
-        <ClientOnly>
-          <GameWithSearchParams />
-        </ClientOnly>
-      </Suspense>
-    </LanguageProvider>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center px-4 text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          Loading
+        </div>
+      }
+    >
+      <ClientOnly>
+        <GameWithSearchParams />
+      </ClientOnly>
+    </Suspense>
   )
 }

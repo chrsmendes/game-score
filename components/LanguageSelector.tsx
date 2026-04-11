@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useLanguage } from './LanguageContext'
-import { Globe } from 'lucide-react'
+import { Check, ChevronDown, Globe2 } from 'lucide-react'
 
 export default function LanguageSelector() {
   const { locale, setLocale } = useLanguage()
@@ -31,41 +31,48 @@ export default function LanguageSelector() {
     }
   }, [])
 
+  const languages = [
+    { value: 'pt', label: 'Português' },
+    { value: 'en', label: 'English' },
+    { value: 'es', label: 'Español' },
+  ] as const
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
+        type="button"
         onClick={toggleDropdown}
-        className="p-2 rounded-full hover:bg-gray-200 transition-colors duration-200"
+        className="btn btn-secondary min-w-[9.5rem] justify-between px-4 py-3"
         aria-label="Select language"
+        aria-expanded={isOpen}
       >
-        <Globe size={24} />
+        <span className="flex items-center gap-2">
+          <Globe2 className="h-4 w-4" />
+          <span className="uppercase">{locale}</span>
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
       </button>
       {isOpen && (
-        <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-          <button
-            className={`block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-gray-100 w-full text-left ${
-              locale === 'pt' ? 'font-bold' : ''
-            }`}
-            onClick={() => changeLanguage('pt')}
-          >
-            Português
-          </button>
-          <button
-            className={`block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-gray-100 w-full text-left ${
-              locale === 'en' ? 'font-bold' : ''
-            }`}
-            onClick={() => changeLanguage('en')}
-          >
-            English
-          </button>
-          <button
-            className={`block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-gray-100 w-full text-left ${
-              locale === 'es' ? 'font-bold' : ''
-            }`}
-            onClick={() => changeLanguage('es')}
-          >
-            Español
-          </button>
+        <div className="absolute right-0 z-20 mt-3 w-52 rounded-[1.5rem] border border-border/70 bg-popover/95 p-2 text-popover-foreground shadow-[0_24px_60px_-32px_hsl(var(--foreground)/0.5)] backdrop-blur-xl">
+          {languages.map((language) => (
+            <button
+              key={language.value}
+              type="button"
+              className={`flex w-full items-center justify-between rounded-[1rem] px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                locale === language.value
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-popover-foreground hover:bg-accent/15'
+              }`}
+              onClick={() => changeLanguage(language.value)}
+            >
+              <span>{language.label}</span>
+              {locale === language.value && <Check className="h-4 w-4" />}
+            </button>
+          ))}
         </div>
       )}
     </div>
