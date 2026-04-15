@@ -198,9 +198,9 @@ function GameWithSearchParams() {
   const latestRounds = gameHistory.slice(0, 3)
 
   return (
-    <main className="relative min-h-screen overflow-hidden px-4 py-5 sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-visible px-4 py-5 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
-        <header className="surface-panel relative overflow-hidden px-5 py-6 sm:px-6">
+        <header className="surface-panel relative z-30 overflow-visible px-5 py-6 sm:px-6">
           <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_center,_hsl(var(--primary)/0.24),_transparent_72%)]" />
           <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
           <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">

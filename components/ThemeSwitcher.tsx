@@ -83,7 +83,7 @@ export default function ThemeSwitcher() {
         />
       </button>
       {isMounted && isOpen && (
-        <div className="absolute right-0 z-20 mt-3 w-52 rounded-[1.5rem] border border-border/70 bg-popover/95 p-2 text-popover-foreground shadow-[0_24px_60px_-32px_hsl(var(--foreground)/0.5)] backdrop-blur-xl">
+        <div className="absolute right-0 z-50 mt-3 w-52 rounded-[1.5rem] border border-border/70 bg-popover/95 p-2 text-popover-foreground shadow-[0_24px_60px_-32px_hsl(var(--foreground)/0.5)] backdrop-blur-xl">
           {(
             [
               ['system', Monitor],
