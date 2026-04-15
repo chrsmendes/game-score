@@ -201,7 +201,7 @@ function GameWithSearchParams() {
     <main className="relative min-h-screen overflow-visible px-4 py-5 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
         <header className="surface-panel relative z-30 overflow-visible px-5 py-6 sm:px-6">
-          <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_center,_hsl(var(--primary)/0.24),_transparent_72%)]" />
+          <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_85%_50%,_hsl(var(--primary)/0.24),_transparent_58%)]" />
           <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
           <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-start gap-4">
