@@ -16,6 +16,9 @@ const ibmPlexMono = IBM_Plex_Mono({
   variable: '--font-ibm-plex-mono',
 })
 
+const shouldLoadVercelAnalytics =
+  process.env.VERCEL === '1' || Boolean(process.env.NEXT_PUBLIC_VERCEL_ENV)
+
 export const metadata: Metadata = {
   title: 'Game Score - Track Your Game Scores',
   description:
@@ -58,8 +61,6 @@ export const viewport: Viewport = {
   ],
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 }
 
 export default function RootLayout({
@@ -87,7 +88,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <LanguageProvider>{children}</LanguageProvider>
-        <Analytics />
+        {shouldLoadVercelAnalytics ? <Analytics /> : null}
         <Script id="register-sw" strategy="afterInteractive">
           {`
             if ('serviceWorker' in navigator) {
