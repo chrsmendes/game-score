@@ -1,13 +1,40 @@
-import { useState, useRef, useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLanguage } from './LanguageContext'
 import { Check, ChevronDown, Globe2 } from 'lucide-react'
 
 export default function LanguageSelector() {
   const { locale, setLocale } = useLanguage()
   const [isOpen, setIsOpen] = useState(false)
+  const [dropdownAlign, setDropdownAlign] = useState<'left' | 'right'>('right')
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const toggleDropdown = () => setIsOpen(!isOpen)
+  const updateDropdownAlignment = useCallback(() => {
+    if (!dropdownRef.current) {
+      return
+    }
+
+    const triggerRect = dropdownRef.current.getBoundingClientRect()
+    const dropdownWidth = 208
+    const viewportPadding = 16
+    const spaceRight = window.innerWidth - triggerRect.left - viewportPadding
+    const spaceLeft = triggerRect.right - viewportPadding
+
+    setDropdownAlign(
+      spaceRight >= dropdownWidth || spaceRight >= spaceLeft ? 'left' : 'right'
+    )
+  }, [])
+
+  const toggleDropdown = () => {
+    setIsOpen((currentIsOpen) => {
+      const nextIsOpen = !currentIsOpen
+
+      if (nextIsOpen) {
+        requestAnimationFrame(updateDropdownAlignment)
+      }
+
+      return nextIsOpen
+    })
+  }
 
   const changeLanguage = (newLocale: 'pt' | 'en' | 'es') => {
     setLocale(newLocale)
@@ -30,6 +57,19 @@ export default function LanguageSelector() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    updateDropdownAlignment()
+    window.addEventListener('resize', updateDropdownAlignment)
+
+    return () => {
+      window.removeEventListener('resize', updateDropdownAlignment)
+    }
+  }, [isOpen, updateDropdownAlignment])
 
   const languages = [
     { value: 'pt', label: 'Português' },
@@ -57,7 +97,11 @@ export default function LanguageSelector() {
         />
       </button>
       {isOpen && (
-        <div className="absolute right-0 z-50 mt-3 w-52 rounded-[1.5rem] border border-border/70 bg-popover/95 p-2 text-popover-foreground shadow-[0_24px_60px_-32px_hsl(var(--foreground)/0.5)] backdrop-blur-xl">
+        <div
+          className={`absolute top-full z-50 mt-3 w-52 max-w-[calc(100vw-2rem)] rounded-[1.5rem] border border-border/70 bg-popover/95 p-2 text-popover-foreground shadow-[0_24px_60px_-32px_hsl(var(--foreground)/0.5)] backdrop-blur-xl ${
+            dropdownAlign === 'left' ? 'left-0' : 'right-0'
+          }`}
+        >
           {languages.map((language) => (
             <button
               key={language.value}

@@ -6,6 +6,7 @@ const pt = {
   startGame: 'Iniciar Jogo',
   updateGame: 'Atualizar Jogo',
   restartGame: 'Reiniciar Jogo',
+  finishGame: 'Terminar Jogo',
   changeTarget: 'Trocar Meta do Jogo',
   newGame: 'Novo Jogo',
   close: 'Fechar',

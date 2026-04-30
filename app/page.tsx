@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import {
+  Flag,
   History,
   Link2,
   RotateCcw,
@@ -124,6 +125,11 @@ function GameWithSearchParams() {
     setShareLink('')
   }
 
+  const finishGame = () => {
+    saveGameRound(gameState)
+    resetGame()
+  }
+
   const changeTarget = () => {
     setShowTargetScoreUpdate(true)
   }
@@ -240,56 +246,38 @@ function GameWithSearchParams() {
         {!gameState.gameName || showSetup ? (
           <section className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_360px]">
             <div className="surface-panel p-5 sm:p-6 lg:p-8">
-              <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_250px]">
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <span className="section-label">{t('startGame')}</span>
-                    <div className="space-y-2">
-                      <h2 className="text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
-                        Game Score
-                      </h2>
-                      <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-                        {t('gameName')} · {t('targetScore')} ·{' '}
-                        {t('initialPoints')}
-                      </p>
-                    </div>
+              <div className="max-w-3xl space-y-6">
+                <div className="space-y-4">
+                  <span className="section-label">{t('startGame')}</span>
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
+                      Game Score
+                    </h2>
+                    <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
+                      {t('gameName')} · {t('targetScore')} ·{' '}
+                      {t('initialPoints')}
+                    </p>
                   </div>
-                  <GameSetup
-                    setGameState={(newState) => {
-                      setGameState((prev) => ({
-                        ...prev,
-                        ...newState,
-                        winner: null,
-                      }))
-                      setShowSetup(false)
-                    }}
-                    initialState={gameState}
-                  />
-                  <button
-                    type="button"
-                    onClick={toggleHistory}
-                    className="btn btn-secondary w-full"
-                  >
-                    <History className="h-4 w-4" />
-                    {t('viewGameHistory')}
-                  </button>
                 </div>
-
-                <div className="grid content-start gap-4">
-                  {gameSummary.map((item) => (
-                    <div key={item.label} className="metric-card space-y-3">
-                      <div className="flex items-center justify-between text-muted-foreground">
-                        <span className="text-xs font-semibold uppercase tracking-[0.2em]">
-                          {item.label}
-                        </span>
-                        <item.icon className="h-4 w-4" />
-                      </div>
-                      <p className="text-lg font-semibold leading-tight text-foreground">
-                        {item.value}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+                <GameSetup
+                  setGameState={(newState) => {
+                    setGameState((prev) => ({
+                      ...prev,
+                      ...newState,
+                      winner: null,
+                    }))
+                    setShowSetup(false)
+                  }}
+                  initialState={gameState}
+                />
+                <button
+                  type="button"
+                  onClick={toggleHistory}
+                  className="btn btn-secondary w-full"
+                >
+                  <History className="h-4 w-4" />
+                  {t('viewGameHistory')}
+                </button>
               </div>
             </div>
 
@@ -514,6 +502,14 @@ function GameWithSearchParams() {
                     >
                       <Link2 className="h-4 w-4" />
                       {t('generateShareLink')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={finishGame}
+                      className="btn btn-secondary w-full"
+                    >
+                      <Flag className="h-4 w-4" />
+                      {t('finishGame')}
                     </button>
                     <button
                       type="button"

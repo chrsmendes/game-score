@@ -6,6 +6,7 @@ const en = {
   startGame: 'Start Game',
   updateGame: 'Update Game',
   restartGame: 'Restart Game',
+  finishGame: 'Finish Game',
   changeTarget: 'Change Game Target',
   newGame: 'New Game',
   close: 'Close',
