@@ -51,19 +51,19 @@ export default function Footer() {
   }, [])
 
   return (
-    <footer className="pb-6 text-sm">
+    <footer className="min-w-0 pb-6 text-sm">
       <div className="surface-panel px-5 py-4">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
+        <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-[1rem] bg-primary/10 text-primary">
               <Sparkles className="h-4 w-4" />
             </div>
-            <p className="text-sm font-medium text-muted-foreground">
+            <p className="min-w-0 break-words text-sm font-medium text-muted-foreground">
               <span className="font-semibold text-foreground">Game Score</span>{' '}
               {version} ({t('beta')})
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={() => setShowChangelog(!showChangelog)}

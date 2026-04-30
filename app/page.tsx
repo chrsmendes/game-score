@@ -206,20 +206,20 @@ function GameWithSearchParams() {
   const latestRounds = gameHistory.slice(0, 3)
 
   return (
-    <main className="relative min-h-screen overflow-visible px-4 py-5 sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6">
+    <main className="relative min-h-screen overflow-x-hidden px-4 py-5 sm:px-6 lg:px-8">
+      <div className="mx-auto flex w-full max-w-6xl min-w-0 flex-col gap-6">
         <header className="surface-panel relative z-30 overflow-visible px-5 py-6 sm:px-6">
           <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_85%_50%,_hsl(var(--primary)/0.24),_transparent_58%)]" />
           <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-          <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-start gap-4">
+          <div className="relative flex min-w-0 flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex min-w-0 items-start gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.4rem] bg-primary text-primary-foreground shadow-lg shadow-primary/20">
                 <Trophy className="h-6 w-6" />
               </div>
-              <div className="space-y-3">
+              <div className="min-w-0 space-y-3">
                 <span className="section-label">Game Score</span>
                 <div className="space-y-3">
-                  <h1 className="text-4xl font-semibold tracking-[-0.06em] sm:text-5xl">
+                  <h1 className="break-words text-4xl font-semibold tracking-[-0.06em] sm:text-5xl">
                     Game Score
                   </h1>
                   <div className="flex flex-wrap gap-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
@@ -244,7 +244,7 @@ function GameWithSearchParams() {
         </header>
 
         {!gameState.gameName || showSetup ? (
-          <section className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_360px]">
+          <section className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.15fr)_360px]">
             <div className="surface-panel p-5 sm:p-6 lg:p-8">
               <div className="max-w-3xl space-y-6">
                 <div className="space-y-4">
@@ -342,7 +342,7 @@ function GameWithSearchParams() {
             </aside>
           </section>
         ) : showTargetScoreUpdate ? (
-          <section className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_360px]">
+          <section className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.15fr)_360px]">
             <div className="surface-panel p-5 sm:p-6 lg:p-8">
               <div className="space-y-6">
                 <div className="space-y-4">
@@ -376,7 +376,7 @@ function GameWithSearchParams() {
               </div>
             </div>
 
-            <aside className="flex flex-col gap-6">
+            <aside className="flex min-w-0 flex-col gap-6">
               <div className="surface-panel p-5 sm:p-6">
                 <ScoreBoard players={gameState.players} />
               </div>
@@ -403,44 +403,44 @@ function GameWithSearchParams() {
             </aside>
           </section>
         ) : (
-          <section className="grid gap-6 xl:grid-cols-[minmax(0,1.3fr)_390px]">
+          <section className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.3fr)_390px]">
             <div className="surface-panel p-5 sm:p-6 lg:p-8">
-              <div className="space-y-8">
-                <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(240px,290px)]">
-                  <div className="space-y-4">
+              <div className="min-w-0 space-y-8">
+                <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(240px,290px)]">
+                  <div className="min-w-0 space-y-4">
                     <span className="section-label">{t('scoreboard')}</span>
                     <div className="space-y-3">
-                      <h2 className="text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
+                      <h2 className="break-words text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
                         {gameState.gameName}
                       </h2>
                       <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
-                        <span className="rounded-full border border-border/70 bg-background/60 px-3 py-1.5">
+                        <span className="max-w-full break-words rounded-[1.2rem] border border-border/70 bg-background/60 px-3 py-1.5">
                           {t('targetScore')}:{' '}
                           {gameState.targetScore > 0
                             ? formatScore(gameState.targetScore)
                             : t('noTargetScore')}
                         </span>
-                        <span className="rounded-full border border-border/70 bg-background/60 px-3 py-1.5">
+                        <span className="max-w-full break-words rounded-full border border-border/70 bg-background/60 px-3 py-1.5">
                           {t('initialPoints')}:{' '}
                           {formatScore(gameState.initialPoints)}
                         </span>
-                        <span className="rounded-full border border-border/70 bg-background/60 px-3 py-1.5">
+                        <span className="max-w-full break-words rounded-full border border-border/70 bg-background/60 px-3 py-1.5">
                           {t('players')}: {gameState.players.length}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                  <div className="grid min-w-0 gap-3 sm:grid-cols-3 lg:grid-cols-1">
                     {gameSummary.map((item) => (
                       <div key={item.label} className="metric-card space-y-3">
-                        <div className="flex items-center justify-between text-muted-foreground">
-                          <span className="text-xs font-semibold uppercase tracking-[0.2em]">
+                        <div className="flex min-w-0 items-center justify-between gap-3 text-muted-foreground">
+                          <span className="min-w-0 break-words text-xs font-semibold uppercase tracking-[0.2em]">
                             {item.label}
                           </span>
-                          <item.icon className="h-4 w-4" />
+                          <item.icon className="h-4 w-4 shrink-0" />
                         </div>
-                        <p className="text-lg font-semibold leading-tight">
+                        <p className="break-words text-lg font-semibold leading-tight">
                           {item.value}
                         </p>
                       </div>
@@ -457,7 +457,7 @@ function GameWithSearchParams() {
               </div>
             </div>
 
-            <aside className="flex flex-col gap-6">
+            <aside className="flex min-w-0 flex-col gap-6">
               <div className="surface-panel p-5 sm:p-6">
                 <ScoreBoard players={gameState.players} />
               </div>
