@@ -160,9 +160,11 @@ function GameWithSearchParams() {
       winner: state.winner,
     }
 
-    const updatedHistory = [newRound, ...gameHistory].slice(0, 10)
-    setGameHistory(updatedHistory)
-    localStorage.setItem('gameHistory', JSON.stringify(updatedHistory))
+    setGameHistory((prev) => {
+      const updatedHistory = [newRound, ...prev].slice(0, 10)
+      localStorage.setItem('gameHistory', JSON.stringify(updatedHistory))
+      return updatedHistory
+    })
   }
 
   const toggleHistory = () => {

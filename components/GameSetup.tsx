@@ -71,14 +71,16 @@ export default function GameSetup({
     <form onSubmit={handleSubmit} className="space-y-5">
       {!isUpdating && (
         <div className="space-y-2">
-          <label
-            htmlFor="gameName"
-            className="mb-2 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground"
-          >
-            <Gamepad2 className="h-4 w-4" />
-            {t('gameName')}
+          <div className="mb-2 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <label
+              htmlFor="gameName"
+              className="inline-flex items-center gap-2"
+            >
+              <Gamepad2 className="h-4 w-4" />
+              {t('gameName')}
+            </label>
             {renderTooltip(t('gameNameTooltip'))}
-          </label>
+          </div>
           <input
             type="text"
             id="gameName"
@@ -91,14 +93,16 @@ export default function GameSetup({
       )}
       <div className={`grid gap-5 ${isUpdating ? '' : 'md:grid-cols-2'}`}>
         <div className="space-y-2">
-          <label
-            htmlFor="targetScore"
-            className="mb-2 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground"
-          >
-            <Target className="h-4 w-4" />
-            {t('targetScore')}
+          <div className="mb-2 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <label
+              htmlFor="targetScore"
+              className="inline-flex items-center gap-2"
+            >
+              <Target className="h-4 w-4" />
+              {t('targetScore')}
+            </label>
             {renderTooltip(t('targetScoreTooltip'))}
-          </label>
+          </div>
           <input
             type="number"
             id="targetScore"
@@ -111,14 +115,16 @@ export default function GameSetup({
         </div>
         {!isUpdating && (
           <div className="space-y-2">
-            <label
-              htmlFor="initialPoints"
-              className="mb-2 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground"
-            >
-              <Sparkles className="h-4 w-4" />
-              {t('initialPoints')}
+            <div className="mb-2 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <label
+                htmlFor="initialPoints"
+                className="inline-flex items-center gap-2"
+              >
+                <Sparkles className="h-4 w-4" />
+                {t('initialPoints')}
+              </label>
               {renderTooltip(t('initialPointsTooltip'))}
-            </label>
+            </div>
             <input
               type="number"
               id="initialPoints"

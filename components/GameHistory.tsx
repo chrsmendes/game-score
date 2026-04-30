@@ -72,10 +72,7 @@ export default function GameHistory({
                   className="rounded-[1.8rem] border border-border/70 bg-background/75 p-4 shadow-sm backdrop-blur sm:p-5"
                 >
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div
-                      className="flex-1 cursor-pointer space-y-4"
-                      onClick={() => copyShareLink(round)}
-                    >
+                    <div className="flex-1 space-y-4">
                       <div className="flex flex-wrap items-center gap-3">
                         <div className="flex h-11 w-11 items-center justify-center rounded-[1.1rem] bg-primary/10 text-primary">
                           <Trophy className="h-5 w-5" />
@@ -133,13 +130,18 @@ export default function GameHistory({
                     </div>
 
                     <div className="flex items-center gap-2 sm:pl-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-background/75">
+                      <button
+                        type="button"
+                        onClick={() => copyShareLink(round)}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-background/75 transition-colors hover:bg-primary/10 hover:text-primary"
+                        aria-label={`${t('clickToShareGame')}: ${round.gameName}`}
+                      >
                         {copiedId === round.id ? (
                           <Check className="h-4 w-4 text-emerald-500" />
                         ) : (
                           <Copy className="h-4 w-4 text-muted-foreground" />
                         )}
-                      </div>
+                      </button>
                       <button
                         type="button"
                         onClick={() => onDelete(round.id)}
