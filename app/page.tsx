@@ -282,7 +282,7 @@ function GameWithSearchParams() {
             </div>
 
             <aside className="surface-panel relative overflow-hidden p-5 sm:p-6">
-              <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,_hsl(var(--accent)/0.28),_transparent_70%)]" />
+              <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_85%_0%,_hsl(var(--accent)/0.18),_transparent_58%)]" />
               <div className="relative space-y-5">
                 <div className="space-y-3">
                   <span className="section-label">
@@ -463,7 +463,7 @@ function GameWithSearchParams() {
               </div>
 
               <div className="surface-panel relative overflow-hidden p-5 sm:p-6">
-                <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.2),_transparent_70%)]" />
+                <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_85%_0%,_hsl(var(--primary)/0.16),_transparent_58%)]" />
                 <div className="relative space-y-5">
                   <div className="space-y-3">
                     <span className="section-label">
