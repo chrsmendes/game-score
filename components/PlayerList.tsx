@@ -40,26 +40,29 @@ export default function PlayerList({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6">
       <form
         onSubmit={handleAddPlayer}
-        className="rounded-[1.8rem] border border-border/70 bg-background/60 p-3 backdrop-blur sm:p-4"
+        className="min-w-0 rounded-[1.8rem] border border-border/70 bg-background/60 p-3 backdrop-blur sm:p-4"
       >
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+        <div className="flex min-w-0 flex-col gap-3 md:flex-row md:items-center">
           <input
             type="text"
             value={newPlayerName}
             onChange={(e) => setNewPlayerName(e.target.value)}
             placeholder={t('playerOrTeam')}
-            className="input flex-grow"
+            className="input min-w-0 flex-grow"
           />
-          <button type="submit" className="btn btn-primary w-full md:w-auto">
+          <button
+            type="submit"
+            className="btn btn-primary w-full whitespace-normal md:w-auto"
+          >
             <Plus className="h-4 w-4" />
             {t('addPlayerOrTeam')}
           </button>
         </div>
       </form>
-      <ul className="grid gap-4">
+      <ul className="grid min-w-0 gap-4">
         {players.map((player, index) => (
           <PlayerItem
             key={index}
@@ -117,10 +120,10 @@ function PlayerItem({
     player.score % 1 === 0 ? player.score : player.score.toFixed(2)
 
   return (
-    <li className="rounded-[1.8rem] border border-border/70 bg-background/70 p-4 shadow-sm backdrop-blur sm:p-5">
-      <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+    <li className="min-w-0 rounded-[1.8rem] border border-border/70 bg-background/70 p-4 shadow-sm backdrop-blur sm:p-5">
+      <div className="flex min-w-0 flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
         {isEditing ? (
-          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
             <input
               type="text"
               value={editedName}
@@ -137,10 +140,10 @@ function PlayerItem({
             </button>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="min-w-0 space-y-3">
             <span className="section-label">{t('player')}</span>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-2xl font-semibold tracking-[-0.04em]">
+              <span className="min-w-0 break-words text-2xl font-semibold tracking-[-0.04em]">
                 {player.name}
               </span>
               <button
@@ -158,7 +161,7 @@ function PlayerItem({
           </div>
         )}
 
-        <div className="flex w-full max-w-sm flex-col gap-4">
+        <div className="flex w-full min-w-0 max-w-sm flex-col gap-4">
           <div className="rounded-[1.5rem] border border-border/70 bg-card/80 p-4">
             <div className="mb-3 flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
@@ -168,7 +171,7 @@ function PlayerItem({
                 +/-
               </span>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex min-w-0 items-center gap-3">
               <button
                 type="button"
                 onClick={() => {
@@ -188,7 +191,7 @@ function PlayerItem({
                 type="number"
                 value={roundPoints}
                 onChange={(e) => setRoundPoints(e.target.value)}
-                className="input h-12 text-center font-mono text-lg"
+                className="input h-12 min-w-0 text-center font-mono text-lg"
                 placeholder="0"
                 step="any"
               />

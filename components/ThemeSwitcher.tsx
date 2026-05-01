@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLanguage } from './LanguageContext'
 import { Check, ChevronDown, Monitor, Moon, Sun } from 'lucide-react'
 
@@ -9,7 +9,24 @@ export default function ThemeSwitcher() {
   const [theme, setTheme] = useState<Theme>('system')
   const [isOpen, setIsOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const [dropdownAlign, setDropdownAlign] = useState<'left' | 'right'>('right')
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const updateDropdownAlignment = useCallback(() => {
+    if (!dropdownRef.current) {
+      return
+    }
+
+    const triggerRect = dropdownRef.current.getBoundingClientRect()
+    const dropdownWidth = 208
+    const viewportPadding = 16
+    const spaceRight = window.innerWidth - triggerRect.left - viewportPadding
+    const spaceLeft = triggerRect.right - viewportPadding
+
+    setDropdownAlign(
+      spaceRight >= dropdownWidth || spaceRight >= spaceLeft ? 'left' : 'right'
+    )
+  }, [])
 
   useEffect(() => {
     const savedTheme = (localStorage.getItem('theme') as Theme) ?? 'system'
@@ -33,6 +50,19 @@ export default function ThemeSwitcher() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    updateDropdownAlignment()
+    window.addEventListener('resize', updateDropdownAlignment)
+
+    return () => {
+      window.removeEventListener('resize', updateDropdownAlignment)
+    }
+  }, [isOpen, updateDropdownAlignment])
 
   const applyTheme = (newTheme: Theme) => {
     const root = document.documentElement
@@ -64,11 +94,23 @@ export default function ThemeSwitcher() {
 
   const ThemeIcon = themeIcons[theme]
 
+  const toggleDropdown = () => {
+    setIsOpen((currentIsOpen) => {
+      const nextIsOpen = !currentIsOpen
+
+      if (nextIsOpen) {
+        requestAnimationFrame(updateDropdownAlignment)
+      }
+
+      return nextIsOpen
+    })
+  }
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggleDropdown}
         className="btn btn-secondary min-w-[9.5rem] justify-between px-4 py-3"
         aria-expanded={isOpen}
       >
@@ -83,7 +125,11 @@ export default function ThemeSwitcher() {
         />
       </button>
       {isMounted && isOpen && (
-        <div className="absolute right-0 z-50 mt-3 w-52 rounded-[1.5rem] border border-border/70 bg-popover/95 p-2 text-popover-foreground shadow-[0_24px_60px_-32px_hsl(var(--foreground)/0.5)] backdrop-blur-xl">
+        <div
+          className={`absolute top-full z-50 mt-3 w-52 max-w-[calc(100vw-2rem)] rounded-[1.5rem] border border-border/70 bg-popover/95 p-2 text-popover-foreground shadow-[0_24px_60px_-32px_hsl(var(--foreground)/0.5)] backdrop-blur-xl ${
+            dropdownAlign === 'left' ? 'left-0' : 'right-0'
+          }`}
+        >
           {(
             [
               ['system', Monitor],

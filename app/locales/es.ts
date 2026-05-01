@@ -6,6 +6,7 @@ const es = {
   startGame: 'Iniciar Juego',
   updateGame: 'Actualizar Juego',
   restartGame: 'Reiniciar Juego',
+  finishGame: 'Finalizar Juego',
   changeTarget: 'Cambiar Meta del Juego',
   changeTargetScore: 'Cambiar Puntuación Objetivo',
   updateTargetScore: 'Actualizar Puntuación Objetivo',

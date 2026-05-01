@@ -130,7 +130,8 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border px-5 py-3 text-sm font-semibold tracking-[0.02em] transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex min-w-0 items-center justify-center gap-2 rounded-full border px-5 py-3 text-center text-sm font-semibold tracking-[0.02em] transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 disabled:cursor-not-allowed disabled:opacity-60;
+    overflow-wrap: anywhere;
     box-shadow: 0 18px 40px -28px hsl(var(--foreground) / 0.45);
   }
 
@@ -151,19 +152,20 @@
   }
 
   .input {
-    @apply w-full rounded-[1.25rem] border border-input bg-background/85 px-4 py-3 text-base shadow-sm outline-none transition-all duration-200 placeholder:text-muted-foreground/75 focus:border-ring focus:ring-4 focus:ring-ring/10;
+    @apply w-full min-w-0 rounded-[1.25rem] border border-input bg-background/85 px-4 py-3 text-base shadow-sm outline-none transition-all duration-200 placeholder:text-muted-foreground/75 focus:border-ring focus:ring-4 focus:ring-ring/10;
   }
 
   .surface-panel {
-    @apply rounded-[2rem] border border-border/70 bg-card/80 text-card-foreground shadow-[0_24px_80px_-40px_hsl(var(--foreground)/0.45)] backdrop-blur-xl;
+    @apply min-w-0 rounded-[2rem] border border-border/70 bg-card/80 text-card-foreground shadow-[0_24px_80px_-40px_hsl(var(--foreground)/0.45)] backdrop-blur-xl;
   }
 
   .section-label {
-    @apply inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground;
+    @apply inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground;
+    overflow-wrap: anywhere;
   }
 
   .metric-card {
-    @apply rounded-[1.75rem] border border-border/70 bg-background/70 p-4 shadow-sm backdrop-blur;
+    @apply min-w-0 rounded-[1.75rem] border border-border/70 bg-background/70 p-4 shadow-sm backdrop-blur;
   }
 
   .ghost-link {
