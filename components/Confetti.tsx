@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import ReactConfetti from 'react-confetti'
+import { PartyPopper, RotateCcw, Target, Trophy, X } from 'lucide-react'
 import { useLanguage } from './LanguageContext'
 
 interface ConfettiProps {
@@ -54,29 +55,56 @@ export default function Confetti({
         numberOfPieces={200}
       />
       <div
-        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-4 py-6 backdrop-blur-sm"
         onClick={onClose}
       >
         <div
-          className="bg-white dark:bg-white text-black dark:text-black text-center p-8 rounded-lg shadow-lg max-w-sm w-full mx-4"
-          onClick={(e) => e.stopPropagation()}
+          className="surface-panel relative w-full max-w-md overflow-hidden p-8 text-center"
+          onClick={(event) => event.stopPropagation()}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-green-600 dark:text-green-600">
-            {t('congratulations')}
-          </h2>
-          <p className="text-xl md:text-2xl mb-6">
-            {t('playerWon', { player: winner })}
-          </p>
-          <div className="space-y-4">
-            <button onClick={onChangeTarget} className="btn btn-primary w-full">
-              {t('changeTarget')}
-            </button>
-            <button onClick={onNewGame} className="btn btn-secondary w-full">
-              {t('newGame')}
-            </button>
-            <button onClick={onClose} className="btn btn-danger w-full">
-              {t('close')}
-            </button>
+          <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,_hsl(var(--accent)/0.34),_transparent_72%)]" />
+          <div className="relative space-y-6">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-primary text-primary-foreground shadow-lg shadow-primary/25">
+              <PartyPopper className="h-7 w-7" />
+            </div>
+            <div className="space-y-3">
+              <span className="section-label justify-center">
+                <Trophy className="h-3.5 w-3.5" />
+                {t('congratulations')}
+              </span>
+              <h2 className="text-3xl font-semibold tracking-[-0.05em] md:text-4xl">
+                {winner}
+              </h2>
+              <p className="text-base leading-7 text-muted-foreground md:text-lg">
+                {t('playerWon', { player: winner })}
+              </p>
+            </div>
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={onChangeTarget}
+                className="btn btn-primary w-full"
+              >
+                <Target className="h-4 w-4" />
+                {t('changeTarget')}
+              </button>
+              <button
+                type="button"
+                onClick={onNewGame}
+                className="btn btn-secondary w-full"
+              >
+                <RotateCcw className="h-4 w-4" />
+                {t('newGame')}
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="btn btn-danger w-full"
+              >
+                <X className="h-4 w-4" />
+                {t('close')}
+              </button>
+            </div>
           </div>
         </div>
       </div>

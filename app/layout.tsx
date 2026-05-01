@@ -1,11 +1,23 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { IBM_Plex_Mono, Space_Grotesk } from 'next/font/google'
 import { LanguageProvider } from '../components/LanguageContext'
 import Script from 'next/script'
-import { Metadata } from 'next'
+import { Metadata, Viewport } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 
-const inter = Inter({ subsets: ['latin'] })
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+})
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-ibm-plex-mono',
+})
+
+const shouldLoadVercelAnalytics =
+  process.env.VERCEL === '1' || Boolean(process.env.NEXT_PUBLIC_VERCEL_ENV)
 
 export const metadata: Metadata = {
   title: 'Game Score - Track Your Game Scores',
@@ -42,10 +54,13 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
 }
 
-export const viewport = {
-  themeColor: '#4a90e2',
-  viewport:
-    'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f5efe3' },
+    { media: '(prefers-color-scheme: dark)', color: '#091a21' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({
@@ -54,10 +69,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#4a90e2" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-icon.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -66,11 +80,14 @@ export default function RootLayout({
         <meta name="application-name" content="Game Score" />
         <meta name="apple-mobile-web-app-title" content="Game Score" />
         <meta name="msapplication-starturl" content="/" />
-        <meta name="msapplication-TileColor" content="#4a90e2" />
+        <meta name="msapplication-TileColor" content="#163847" />
       </head>
-      <body className={inter.className} suppressHydrationWarning>
+      <body
+        className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} font-sans`}
+        suppressHydrationWarning
+      >
         <LanguageProvider>{children}</LanguageProvider>
-        <Analytics />
+        {shouldLoadVercelAnalytics ? <Analytics /> : null}
         <Script id="register-sw" strategy="afterInteractive">
           {`
             if ('serviceWorker' in navigator) {

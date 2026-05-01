@@ -54,6 +54,8 @@ const pt = {
   dark: 'Escuro',
   light: 'Claro',
   deleteHistory: 'Excluir item do histórico',
+  clickToShareGame:
+    'Clique em qualquer partida para gerar um link de compartilhamento.',
   gameNameTooltip: 'Exemplos: "Truco" ou "Uno"',
   targetScoreTooltip: 'Exemplos: "No Truco, a pontuação objetivo é 12"',
   initialPointsTooltip:

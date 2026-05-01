@@ -12,10 +12,12 @@ export default function Changelog({
   urlReleaseInfo,
 }: ChangelogProps) {
   return (
-    <div className="mt-2 p-2 shadow-lg rounded-lg">
-      <h3 className="font-bold text-center">{version} Changelog:</h3>
+    <div className="surface-panel mt-4 p-5 sm:p-6">
+      <h3 className="text-center text-xl font-semibold tracking-[-0.04em]">
+        {version} Changelog
+      </h3>
       <div
-        className="markdown-content p-6"
+        className="markdown-content p-4 sm:p-6"
         dangerouslySetInnerHTML={{ __html: changelog }}
       />
       <div className="markdown-content">

@@ -54,6 +54,8 @@ const es = {
   dark: 'Oscuro',
   light: 'Claro',
   deleteHistory: 'Eliminar elemento del historial',
+  clickToShareGame:
+    'Haz clic en cualquier partida para generar un enlace para compartir.',
   gameNameTooltip: 'Ejemplos: "Truco" o "Uno"',
   targetScoreTooltip: 'Ejemplos: "En Truco, la puntuación objetivo es 12"',
   initialPointsTooltip:
